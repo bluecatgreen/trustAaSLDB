@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(yes | npm run db:push 2>&1)",
+      "Bash(sqlite3:*)",
+      "Bash(node:*)",
+      "Bash(DATABASE_URL=file:./local.db npx drizzle-kit:*)",
+      "Bash(curl:*)",
+      "Bash(lsof:*)",
+      "Bash(npx drizzle-kit:*)",
+      "Bash(npx svelte-kit:*)",
+      "Bash(tail:*)",
+      "Bash(cat:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npm install:*)"
+    ]
+  }
+}

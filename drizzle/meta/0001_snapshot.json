@@ -1,0 +1,130 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "tables": {
+    "business_transaction": {
+      "name": "business_transaction",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transaction_start_date": {
+          "name": "transaction_start_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transaction_end_date": {
+          "name": "transaction_end_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "creator_id": {
+          "name": "creator_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "references": {
+            "table": "user",
+            "column": "id"
+          }
+        },
+        "creator_role": {
+          "name": "creator_role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider_id": {
+          "name": "provider_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "references": {
+            "table": "user",
+            "column": "id"
+          }
+        },
+        "provider_name": {
+          "name": "provider_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider_rating": {
+          "name": "provider_rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "receiver_id": {
+          "name": "receiver_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "references": {
+            "table": "user",
+            "column": "id"
+          }
+        },
+        "receiver_name": {
+          "name": "receiver_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "receiver_rating": {
+          "name": "receiver_rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "provider_rating_feedback": {
+          "name": "provider_rating_feedback",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "receiver_rating_feedback": {
+          "name": "receiver_rating_feedback",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1739308800000
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {}
+  }
+}

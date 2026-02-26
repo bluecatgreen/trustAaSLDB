@@ -1,0 +1,642 @@
+    1  pwd
+    2  ls
+    3  who
+    4  sudo ls
+    5  sudo apt update
+    6  sudo apt install curl
+    7  pwd
+    8  curl -fsSL https://ollama.com/install.sh | sh
+    9  ollama 
+   10  exit
+   11  curl -fsSL https://ollama.com/install.sh | sh
+   12  which curl
+   13  echo $PATH
+   14  sudo
+   15  sudo ls
+   16  sudo vi
+   17  su - 
+   18  exit
+   19  python
+   20  mkdir ollama
+   21  cd ollama/
+   22  sudo apt install pip3
+   23  sudo apt install uv
+   24  sudo apt update
+   25  sudo apt install python3-pip
+   26  vi streaming.py
+   27  pip3 install ollama
+   28  python3 -m venv $PWD
+   29  sudo apt install python3.11-venv
+   30  python3 -m venv $PWD
+   31  ls
+   32  cd bin
+   33  ls
+   34  . activate
+   35  cd ..
+   36  ls
+   37  pip3 install ollama
+   38  ls
+   39  python streaming.py 
+   40  ollama install qwen3
+   41  ollama 
+   42  ollama list
+   43  ollama pull qwen
+   44  ollama list
+   45  ollama run qwen
+   46  ollama rm qwen
+   47  ollama list
+   48  ollama pull mistral-small
+   49  ollama pull smallthinker
+   50  ollama list
+   51  ollama run smallthinker
+   52  ollama pull llama3.2
+   53  ollama run llama3.2
+   54  mem
+   55  top
+   56  clear
+   57  ls
+   58  ollama list
+   59  ollama rm llama3.2 
+   60  df -k .
+   61  ollama rm smallthinker
+   62  df -k .
+   63  ollama list
+   64  ollama pull smollm
+   65  ollama run smollm
+   66  ollama pull smollm:135m
+   67  ollama run smollm:135m
+   68  ollama list
+   69  ollama rm smollm:latest
+   70  ollama list
+   71  ollama run smollm
+   72  ollama list
+   73  vi streaming.py 
+   74  python3 streaming.py 
+   75  vi streaming.py 
+   76  python3 streaming.py 
+   77  vi streaming.py 
+   78  vi toolcalling.py
+   79  ollama list
+   80  vi toolcalling.py
+   81  python3 toolcalling.py 
+   82  vi toolcalling.py
+   83  python3 toolcalling.py 
+   84  ollama list
+   85  ollama rm smollm:135m
+   86  ollama pull gemma3:270m
+   87  ollama list
+   88  ollama run gemma3:270m
+   89  ollama list
+   90  vi toolcalling.py
+   91  python3 toolcalling.py 
+   92  ollama pull SmolLM3
+   93  ollama pull mistral
+   94  ollama run mistral
+   95  ollama rm mistral
+   96  exit
+   97  df -k 
+   98  mount 
+   99  df -k 
+  100  cd 
+  101  history
+  102  which ollama
+  103  cd
+  104  cd ollama/
+  105  ls
+  106  cd ..
+  107  rm -rf ollama/
+  108  df -k .
+  109  ollama list
+  110  ollama rm gemma3:270m
+  111  ollama 
+  112  ollama show smollm2
+  113  ollama pull smollm2:135
+  114  ollama pull smollm2:135m
+  115  ollama run smollm2:135
+  116  ollama run smollm2:135m
+  117  mkdir ollama
+  118  cd ollama/
+  119  python3 -m venv $PWD
+  120  ls
+  121  cd bin 
+  122  ls
+  123  . activate
+  124  pip install ollama
+  125  ls
+  126  vi toolcalling.py
+  127  vi toolcalling.py 
+  128  python3 toolcalling.py 
+  129  vi toolcalling.py 
+  130  python3 toolcalling.py 
+  131  ollama run smollm2
+  132  ollama rm smollm2
+  133  ollama rm smollm2:135m
+  134  ollama pull llama3-groq-tool-use
+  135  ollama list
+  136  cd /tmp
+  137  ls
+  138  df .
+  139  df
+  140  exit
+  141  history
+  142  history | grep "rm"
+  143  ollam run granite4
+  144  ollama run granite4
+  145  ollama rm granite4
+  146  ollama run llama3.2:1b
+  147  ollama rm llama3.2:1b
+  148  exit
+  149  top
+  150  history
+  151  ollama rm granite4
+  152  ollama run granite4
+  153  ollama 
+  154  ollama list
+  155  exit
+  156  ollama run qwen
+  157  exit
+  158  ls
+  159  cd ollama/
+  160  ls
+  161  cd bin
+  162  ls
+  163  . activate
+  164  cd ..
+  165  ls
+  166  ollama list
+  167  ollam rm qwen
+  168  ollama rm qwen
+  169  ollama run qwen3
+  170  exit
+  171  mkir mcp
+  172  mkdir
+  173  pip install uv
+  174  sudo pip install uv
+  175  mkdir mcp
+  176  cd mcp/
+  177  ls
+  178  python3 -m venv mcp
+  179  ls
+  180  cd mcp/
+  181  ls
+  182  cd bin/
+  183  ls
+  184  . activate
+  185  pip install uv
+  186  ls
+  187  df -k .
+  188  exit
+  189  ollama -list
+  190  ollama -
+  191  ollama list
+  192  cd ollama/
+  193  ls
+  194  vi streaming.py 
+  195  cd 
+  196  cd Documents/
+  197  ls
+  198  vi ThinkingOllamaOutput.txt 
+  199  df -k .
+  200  cd .ollama/
+  201  ls
+  202  ls -lart
+  203  ollama -list
+  204  ollama list
+  205  ollama run gemma
+  206  ollama rm gemma
+  207  top
+  208  history | grep gemma
+  209  ls
+  210  cd ollama/
+  211  ls
+  212  cd bin
+  213  ls
+  214  . activate
+  215  cd ..
+  216  vi thinking.py
+  217  python thinking.py 
+  218  ollama list
+  219  vi structured1.py
+  220  python structured1.py 
+  221  vi structured2.py
+  222  python structured2.py 
+  223  python structured1.py 
+  224  ld
+  225  ls
+  226  vi structured3.py
+  227  python structured3.py 
+  228  vi structured3.py
+  229  ollama run moondream
+  230  ls
+  231  ls -lrt ~/Downloads/
+  232  mv ~/Downloads/Charging_Bull_statue.jpeg jk.jpeg
+  233  ls -lrt
+  234  ollama list
+  235  vi structured4.py
+  236  python structured4.py 
+  237  ls
+  238  mv jk.jpeg jk.jpg
+  239  python structured4.py 
+  240  vi structured4.py
+  241  dmesg | grep tty
+  242  sudo dmesg | grep tty
+  243  sudo dmesg | grep tty | wc
+  244  sudo dmesg | grep tty 
+  245  sudo dmesg | grep tty | wc
+  246  sudo dmesg | grep tty 
+  247  sudo dmesg | grep tty | wc
+  248  sudo dmesg | grep tty 
+  249  sudo dmesg | grep tty | wc
+  250  cd /dev
+  251  ls
+  252  ls -l ttyUS*
+  253  ls -l | grep tty
+  254  sudo dmesg | grep tty | wc
+  255  ls -l | grep tty
+  256  sudo dmesg | grep tty 
+  257  lsusb
+  258  lsusb|wc
+  259  lsusb
+  260  cd Downloads/
+  261  ls-lrt
+  262  ls -lrt
+  263  chmod 755 arduino-ide_2.3.6_Linux_64bit.AppImage 
+  264  ./arduino-ide_2.3.6_Linux_64bit.AppImage 
+  265  ls -lrt
+  266  mkdir gemini
+  267  cd gemini
+  268  vi key.txt
+  269  ls
+  270  cd gemini/
+  271  ls
+  272  pip -m venv 
+  273  python3  -m venv 
+  274  python3  -m venv gemini
+  275  ls
+  276  source gemini/bin/activate
+  277  ls
+  278  pip install google-generativeai
+  279  vi keytest.py
+  280  ls
+  281  cat key.txt 
+  282  vi keytest.py 
+  283  python keytest.py 
+  284  vi keytest.py 
+  285  python keytest.py 
+  286  vi keytest.py 
+  287  python keytest.py 
+  288  sudo useradd 
+  289  sudo useradd umamahesh 
+  290  su - umamahesh
+  291  sudo su - umamahesh 
+  292  sudo passwd umamahesh 
+  293  su -umamahesh
+  294  su - umamahesh
+  295  sudo useradd tarajank -p Goodgirl
+  296  su - tarajank
+  297  sudo passwd tarajank
+  298  su - tarajank
+  299  sudo usermod 
+  300  vi /etc/passwd
+  301  sudo usermod  -d /home/umamahesh umamahesh
+  302  sudo usermod  --home /home/umamahesh umamahesh
+  303  sudo usermod umamahesh --home /home/umamahesh 
+  304  sudo userdel umamahesh
+  305  sudo useradd --home /home/umamahesh -passord Goodgirl umamahesh
+  306  sudo useradd --home /home/umamahesh --password Goodgirl umamahesh
+  307  cd /home/
+  308  ls
+  309  cd ..
+  310  ls -lrt
+  311  cd /home
+  312  ls
+  313  vi /etc/passwd
+  314  ls -l | grep rjankir
+  315  sudo mkdir umamahesh
+  316  ls -lrt
+  317  sudo chown umamahesh:umamahesh umamahesh
+  318  ls -lrt
+  319  cat /etc/passwd
+  320  sudo mkdir tarajank
+  321  sudo chown tarajank:tarajank tarajank/
+  322  ls -lrt
+  323  su - umamahesh
+  324  sudo passwd umamahesh 
+  325  exit
+  326  vi notesfromv.txt
+  327  vi  image2text.py
+  328  exit
+  329  ollama -list
+  330  ollama 
+  331  ollama list
+  332  sudo apt update
+  333  sudo apt install fonts-indic
+  334  source bin/activate
+  335  pip install pandas
+  336  pip install matplotlib
+  337  pip install torch
+  338  pip install sklearn
+  339  pip install scikit-learn
+  340  cd 
+  341  cd Downloads/
+  342  ls
+  343  ls -lrt
+  344  rm arduino-ide_2.3.6_Linux_64bit.AppImage 
+  345  cd 
+  346  cd Arduino/
+  347  ls
+  348  cd ..
+  349  pwd
+  350  cd Downloads/
+  351  ls
+  352  mv CTA_-_Ridership_-_Daily_Boarding_Totals.csv CTA.csv
+  353  pwd
+  354  vi firstcoachingSummary.txt
+  355  pwd
+  356  ls
+  357  cd ollama/
+  358  ls
+  359  cd ..
+  360  mkdir jupter
+  361  python3 -m venv jupyter
+  362  ls
+  363  rmdir jupter/
+  364  cd jupyter/
+  365  la
+  366  ls
+  367  source bin/activate
+  368  pip install jupyterlab
+  369  ls
+  370  jupyter lab
+  371  exit
+  372  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+  373  which nvm
+  374  ./.nvm/nvm.sh 
+  375  nvm
+  376  ./.nvm/nvm.sh install 24
+  377  cd
+  378  . .nvm/nvm.sh 
+  379  nvm install 24
+  380  node -v
+  381  npm -v
+  382  vi cast.html
+  383  mkdir casa
+  384  cd casa/
+  385  mv ../cast.html index.html
+  386  cd
+  387  cd Downloads/
+  388  ls -lrt
+  389  mv 'WhatsApp Image 2026-01-09 at 13.56.09.jpeg' image.jeg
+  390  mv image.jeg image.jpeg
+  391  cd Downloads/
+  392  ls -lrt
+  393  mv 'index(2).html' ~/kolinji/index.html 
+  394  cd ../kolinji/
+  395  ls
+  396  vi index.new.html
+  397  vi index.html 
+  398  cd ~/Downloads/
+  399  ls -lrt
+  400  mv 'WhatsApp Image 2026-01-17 at 13.20.32.jpeg' PANCARD.jpeg
+  401  cd
+  402  cd kolinji/
+  403  ls
+  404  vi index.
+  405  vi index.html 
+  406  vi blogger.html
+  407  vi index.new.html 
+  408  sudo apt install tesseract-ocr
+  409  tesseract 
+  410  tesseract --list-langs
+  411  mkdir ocr
+  412  cd ocr/
+  413  history | grep python
+  414  python3 -m venv ocr
+  415  . ocr/bin/activate.csh 
+  416  . ocr/bin/activate
+  417  source ocr/bin/activate
+  418  pip install pytesseract Pillow
+  419  vi ocr_script.py
+  420  vi ocr_script.py 
+  421  python3 ocr_script.py 
+  422  ls
+  423  vi ocr_script.py 
+  424  python3 ocr_script.py 
+  425  python3 ocr_script.py >> adhi.txt
+  426  vi adhi.txt 
+  427  ollma list
+  428  ollama list
+  429  history | grep update
+  430  vi tridip.txt 
+  431  vi adhi.txt 
+  432  python3 -m vend readchar
+  433  python3 -m venxxd readchar
+  434  python3 -m venv readchar
+  435  cd readchar/
+  436  ls
+  437  source bin/activate
+  438  pip install readchar
+  439  vi readchar.py
+  440  python3 readchar.py 
+  441  cat readchar.py
+  442  vi readchar.py
+  443  exit
+  444  vi readchar.py
+  445  vi tridip.txt 
+  446  gimp
+  447  vi tridip.txt 
+  448  cd ~/Downloads/
+  449  ls -lrt
+  450  sudo apt install ./zoom_amd64.deb 
+  451  top
+  452  kill -9 1962
+  453  top
+  454  exit
+  455  mkdir trust-service
+  456  cd trust-service/
+  457  mkdir backend frontend
+  458  cd backend/
+  459  vi main.py
+  460  vi models.py
+  461  vi database.py
+  462  cd ..
+  463  ls -lrt
+  464  rmdir frontend/
+  465  npm
+  466  npm create svelte@latest frontend
+  467  npm create sv@latest frontend
+  468  ls
+  469  npm create svelte@latest frontend
+  470  npx sv create frontend
+  471  which ollama
+  472  ollama
+  473  ollama -v
+  474  ollama list
+  475  ollama launch claude
+  476  sudo su - 
+  477  ollama launch claude
+  478  sudo su - 
+  479  claude --help
+  480  https://claude.ai/install.sh| bash
+  481  curl -fsSL https://claude.ai/install.sh | bash
+  482  cd .local/
+  483  ls
+  484  cd bin/
+  485  ls
+  486  cd ..
+  487  export PATH=$PATH:~/.local/bin
+  488  which claude
+  489  pwd
+  490  ollama launch claude
+  491  ls
+  492  ls -lrt
+  493  cd pyspark/
+  494  ls
+  495  cd pyspark/
+  496  ls
+  497  ollama launch claude
+  498  ls
+  499  ollama launch claude
+  500  ollama run gpt-oss
+  501  ollama launch claude
+  502  ollama launch claude minimax-m2.5
+  503  ollama launch claude -m minimax-m2.5
+  504  ollama launch claude --help
+  505  ollama launch claude --model minimax-m2.5
+  506  ollama --list
+  507  ollama --help
+  508  ollama list
+  509  ollama launch claude --model minimax-m2.5:cloud
+  510  ls -lrt
+  511  vi CLAUDE.md 
+  512  top
+  513  exit
+  514  ollam models
+  515  ollma models
+  516  ollama models
+  517  ollama 
+  518  ollama --help
+  519  ollama list
+  520  vi jk.txt
+  521  vi jk.txt 
+  522  ls
+  523  cd trustAaSLDB/
+  524  ls
+  525  npm run dev -- --open
+  526  npm run auth:schema
+  527  vi src/lib/server/db/auth.schema.ts 
+  528  npm run db:push
+  529  ls
+  530  ls -lrt
+  531  ls -lart
+  532  vi README.md 
+  533  cat .env
+  534  exit
+  535  cd trustAaSLDB/
+  536  ls
+  537  ls -l
+  538  vi svelte.config.js 
+  539  vi drizzle.config.ts 
+  540  cd src
+  541  ls
+  542  cd lib
+  543  ls
+  544  cd ..
+  545  ls
+  546  ls -lart
+  547  vi .env
+  548  pwd
+  549  ls -lart
+  550  exit
+  551  top
+  552  curl -fsSL https://claude.ai/install.sh | bash
+  553  ls
+  554  ls -lrt
+  555  cd trust-service/
+  556  ls
+  557  cd ..
+  558  rm 'Recording 1.flac' 
+  559  mkdir svelte
+  560  cd svelte/
+  561  ls
+  562  npx sv create
+  563  ls
+  564  cd trustAaS/
+  565  ls
+  566  code .
+  567  cd ..
+  568  npx sv create
+  569  npm run dev -- --open
+  570  cd trustAaSLDB/
+  571  npm run dev -- --open
+  572  exit
+  573  vi flip.svc
+  574  vi flip.svg
+  575  ollama -lis
+  576  ollama -list
+  577  ollama list
+  578  ollama run deepseek-r1
+  579  ollama list
+  580  ollama run minimax-m2.5:cloud
+  581  python3 -m venv parquet
+  582  cd parquet/
+  583  ls
+  584  source bin/activate
+  585  pip install pandas pyarrow fastparquet
+  586  ls -lrt ~/Downloads/
+  587  mv ~/Downloads/part-00000-tid-2652813375822267916-d5fd72d6-838a-486e-9d8c-4990b298f394-299641-1-c000.snappy.parquet .
+  588  mv part-00000-tid-2652813375822267916-d5fd72d6-838a-486e-9d8c-4990b298f394-299641-1-c000.snappy.parquet part.parquet
+  589  ls
+  590  vi one.py
+  591  python3 one.py 
+  592  cd svelte/
+  593  ls
+  594  cd trustAaSLDB/
+  595  ls
+  596  claude 
+  597  ollama launch claude
+  598  vi claude-code.txt
+  599  ls -lty
+  600  ls -lrt
+  601  vi CLAUDE.md 
+  602  exit
+  603  cd trust-service/
+  604  ls
+  605  cd ..
+  606  ls -lrt
+  607  cd svelte/
+  608  ls
+  609  cat jk.txt 
+  610  cd ..
+  611  ls
+  612  cd -
+  613  ls
+  614  cd trustAaSLDB/
+  615  ls
+  616  ls -lrt
+  617  vi CLAUDE.md 
+  618  vi package.json 
+  619  ls
+  620  cat claude-code.txt 
+  621  cat CLAUDE.md 
+  622  vi CLAUDE.md 
+  623  npm run storybook
+  624  ps
+  625  cd svelte/
+  626  ls
+  627  cd trustAaSLDB/
+  628  ls
+  629  code .
+  630  vi README.md 
+  631  vi CLAUDE.md 
+  632  vi README.md 
+  633  cat claude-code.txt 
+  634  vi package.json 
+  635  npm run dev
+  636  ls
+  637  cat claude-code.txt 
+  638  claude --resume e25fbe0d-c89f-45cc-a22c-c376864bf2bb
+  639  ollama run claude
+  640  history
+  641  history | more
+  642  history > his.txt
