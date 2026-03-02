@@ -1,18 +1,49 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import type { PageData } from './$types';
+	import type { ActionResult } from '@sveltejs/kit';
 
 	let { data }: { data: PageData } = $props();
 
 	let showLoginModal = $state(false);
 	let showRegisterModal = $state(false);
 	let isBusiness = $state(false);
+	let loginError = $state('');
+	let registerError = $state('');
+	let transactionMessage = $state('');
+	let transactionSuccess = $state(false);
+
+	// Close modal when user is logged in
+	$effect(() => {
+		if (data.user) {
+			showLoginModal = false;
+			showRegisterModal = false;
+		}
+	});
 
 	// Form state
 	let creatorRole = $state('provider');
 	let otherPartyName = $state('');
 	let otherPartyId = $state('');
 	let rating = $state(5);
+
+	function resetTransactionForm() {
+		creatorRole = 'provider';
+		otherPartyName = '';
+		otherPartyId = '';
+		rating = 5;
+		searchQuery = '';
+		searchResults = [];
+		// Reset form input fields after a small delay to ensure DOM is updated
+		setTimeout(() => {
+			document.querySelectorAll('input[name="amount"]').forEach((el) => (el as HTMLInputElement).value = '');
+			document.querySelectorAll('input[name="transactionStartDate"]').forEach((el) => (el as HTMLInputElement).value = '');
+			document.querySelectorAll('input[name="transactionEndDate"]').forEach((el) => (el as HTMLInputElement).value = '');
+			document.querySelectorAll('textarea[name="description"]').forEach((el) => (el as HTMLTextAreaElement).value = '');
+			document.querySelectorAll('textarea[name="ratingFeedback"]').forEach((el) => (el as HTMLTextAreaElement).value = '');
+		}, 0);
+	}
 
 	// Search state
 	let searchQuery = $state('');
@@ -105,7 +136,30 @@
 			<!-- Logged in user - Business Transaction Form -->
 			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
 				<h2 class="font-['Space_Grotesk'] text-2xl font-bold text-white mb-6">Create Business Transaction</h2>
-				<form method="post" class="space-y-6">
+				{#if transactionMessage}
+					<div class="mb-6 p-4 rounded-lg {transactionSuccess ? 'bg-green-500/20 border border-green-500/50 text-green-300' : 'bg-red-500/20 border border-red-500/50 text-red-300'}">
+						{transactionMessage}
+					</div>
+				{/if}
+				<form
+					method="post"
+					use:enhance={() => {
+						return async ({ result }: { result: ActionResult }) => {
+							if (result.type === 'success') {
+								transactionMessage = 'Business transaction created successfully!';
+								transactionSuccess = true;
+								resetTransactionForm();
+								// Clear message after 5 seconds
+								setTimeout(() => { transactionMessage = ''; }, 5000);
+							} else if (result.type === 'failure') {
+								transactionMessage = result.data?.message || 'Failed to create transaction';
+								transactionSuccess = false;
+							}
+							await invalidateAll();
+						};
+					}}
+					class="space-y-6"
+				>
 					<!-- Role Selection -->
 					<div>
 						<label class="block text-sm font-medium text-purple-200 mb-2">I am the</label>
@@ -267,7 +321,29 @@
 					</svg>
 					<p class="text-sm">Sign in or register to save your business transaction</p>
 				</div>
-				<form method="post" class="space-y-6">
+				{#if transactionMessage}
+					<div class="mb-6 p-4 rounded-lg {transactionSuccess ? 'bg-green-500/20 border border-green-500/50 text-green-300' : 'bg-red-500/20 border border-red-500/50 text-red-300'}">
+						{transactionMessage}
+					</div>
+				{/if}
+				<form
+					method="post"
+					use:enhance={() => {
+						return async ({ result }: { result: ActionResult }) => {
+							if (result.type === 'success') {
+								transactionMessage = 'Business transaction created successfully!';
+								transactionSuccess = true;
+								resetTransactionForm();
+								setTimeout(() => { transactionMessage = ''; }, 5000);
+							} else if (result.type === 'failure') {
+								transactionMessage = result.data?.message || 'Failed to create transaction';
+								transactionSuccess = false;
+							}
+							await invalidateAll();
+						};
+					}}
+					class="space-y-6"
+				>
 					<!-- Role Selection -->
 					<div>
 						<label class="block text-sm font-medium text-purple-200 mb-2">I am the</label>
@@ -381,15 +457,36 @@
 
 <!-- Login Modal -->
 {#if showLoginModal}
-	<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onclick={() => { showLoginModal = false; }}>
+	<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onclick={() => { showLoginModal = false; loginError = ''; }}>
 		<div class="bg-gray-900 border border-white/10 rounded-2xl p-8 w-full max-w-md" onclick={(e) => e.stopPropagation()}>
 			<div class="flex items-center justify-between mb-6">
 				<h2 class="font-['Space_Grotesk'] text-2xl font-bold text-white">Sign In</h2>
-				<button onclick={() => { showLoginModal = false; }} class="text-purple-400 hover:text-white">
+				<button onclick={() => { showLoginModal = false; loginError = ''; }} class="text-purple-400 hover:text-white">
 					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
 				</button>
 			</div>
-			<form method="post" action="/demo/better-auth/login?/signInEmail" use:enhance class="space-y-4">
+			<form
+				method="post"
+				action="/demo/better-auth/login?/signInEmail"
+				use:enhance={() => {
+					return async ({ result }: { result: ActionResult }) => {
+						if (result.type === 'failure') {
+							loginError = result.data?.message || 'Sign in failed';
+						} else {
+							// Close modal and reload data to reflect logged-in state
+							showLoginModal = false;
+							loginError = '';
+							await invalidateAll();
+						}
+					};
+				}}
+				class="space-y-4"
+			>
+				{#if loginError}
+					<div class="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+						{loginError}
+					</div>
+				{/if}
 				<div>
 					<label class="block text-sm font-medium text-purple-200 mb-2">Email</label>
 					<input
@@ -423,15 +520,33 @@
 
 <!-- Register Modal -->
 {#if showRegisterModal}
-	<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onclick={() => { showRegisterModal = false; }}>
+	<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onclick={() => { showRegisterModal = false; registerError = ''; }}>
 		<div class="bg-gray-900 border border-white/10 rounded-2xl p-8 w-full max-w-md" onclick={(e) => e.stopPropagation()}>
 			<div class="flex items-center justify-between mb-6">
 				<h2 class="font-['Space_Grotesk'] text-2xl font-bold text-white">Register</h2>
-				<button onclick={() => { showRegisterModal = false; }} class="text-purple-400 hover:text-white">
+				<button onclick={() => { showRegisterModal = false; registerError = ''; }} class="text-purple-400 hover:text-white">
 					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
 				</button>
 			</div>
-			<form method="post" action="/demo/better-auth/login?/signUpEmail" use:enhance class="space-y-4">
+			<form
+				method="post"
+				action="/demo/better-auth/login?/signUpEmail"
+				use:enhance={() => {
+					return async ({ result }: { result: ActionResult }) => {
+						if (result.type === 'failure') {
+							registerError = result.data?.message || 'Registration failed';
+						} else {
+							registerError = '';
+						}
+					};
+				}}
+				class="space-y-4"
+			>
+				{#if registerError}
+					<div class="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+						{registerError}
+					</div>
+				{/if}
 				<div>
 					<label class="block text-sm font-medium text-purple-200 mb-2">Name</label>
 					<input

@@ -24,8 +24,7 @@ export const actions: Actions = {
 			await auth.api.signInEmail({
 				body: {
 					email,
-					password,
-					callbackURL: '/auth/verification-success'
+					password
 				}
 			});
 		} catch (error) {

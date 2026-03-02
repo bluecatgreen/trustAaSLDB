@@ -52,6 +52,8 @@ export const actions: Actions = {
 		const rating = formData.get('rating') as string;
 		const ratingFeedback = formData.get('ratingFeedback') as string;
 
+		console.log('[DEBUG] otherPartyId:', JSON.stringify(otherPartyId), '| otherPartyName:', otherPartyName);
+
 		if (!creatorRole || !otherPartyName || !transactionStartDate || !rating) {
 			return fail(400, { message: 'Missing required fields' });
 		}
@@ -62,6 +64,7 @@ export const actions: Actions = {
 
 		// Validate that the other party is a registered user
 		if (!otherPartyId) {
+			console.log('[DEBUG] Validation failed: otherPartyId is empty');
 			return fail(400, { message: 'Please select a registered user as the other party' });
 		}
 
@@ -73,6 +76,7 @@ export const actions: Actions = {
 			.get();
 
 		if (!otherParty) {
+			console.log('[DEBUG] Validation failed: otherParty not found in DB');
 			return fail(400, { message: 'The selected user is not a registered user. Please select a registered user.' });
 		}
 
