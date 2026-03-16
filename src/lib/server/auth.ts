@@ -4,15 +4,18 @@ import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { env } from '$env/dynamic/private';
 import { getRequestEvent } from '$app/server';
 import { db } from '$lib/server/db';
-import { user } from '$lib/server/db/auth.schema';
+import { user, verification } from '$lib/server/db/auth.schema';
+import * as schema from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { sendVerificationEmail } from '$lib/server/email';
 
 export const auth = betterAuth({
 	baseURL: env.ORIGIN,
 	secret: env.BETTER_AUTH_SECRET,
-	database: drizzleAdapter(db, { provider: 'sqlite' }),
+	database: drizzleAdapter(db, { provider: 'sqlite', schema }),
 	emailAndPassword: {
 		enabled: true,
+		requireEmailVerification: true,
 		additionalFields: {
 			isBusiness: {
 				type: 'boolean',
@@ -44,6 +47,22 @@ export const auth = betterAuth({
 					})
 					.where(eq(user.id, newUser.id));
 			}
+		}
+	},
+	emailVerification: {
+		sendOnSignUp: true,
+		sendVerificationEmail: async ({ user: u, token, url }) => {
+			// Manually store verification token since adapter might not do it
+			const identifier = `email:${u.email}`;
+			await db.insert(verification).values({
+				id: crypto.randomUUID(),
+				identifier,
+				value: token,
+				expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+				createdAt: new Date(),
+				updatedAt: new Date()
+			}).onConflictDoNothing();
+			await sendVerificationEmail(u.email, token, url);
 		}
 	},
 	plugins: [sveltekitCookies(getRequestEvent)]
