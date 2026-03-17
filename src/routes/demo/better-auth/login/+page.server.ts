@@ -74,6 +74,6 @@ export const actions: Actions = {
 			return fail(500, { message: 'Unexpected error' });
 		}
 
-		return redirect(302, '/');
+		return redirect(302, '/demo/better-auth/login?message=verification-sent&email=' + encodeURIComponent(email));
 	}
 };
