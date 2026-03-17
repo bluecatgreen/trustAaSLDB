@@ -1,10 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
 
 	let isBusiness = $state(false);
+
+	const message = $derived($page.url.searchParams.get('message'));
+	const email = $derived($page.url.searchParams.get('email'));
+	let verificationEmail = $derived($page.url.searchParams.get('email') ?? '');
 </script>
 
 <svelte:head>
@@ -29,7 +34,13 @@
 			</p>
 		</div>
 
-		<form method="post" action="?/signInEmail" use:enhance class="space-y-5">
+		<form method="post" action="?/signInEmail" use:enhance={() => {
+			return async ({ result }) => {
+				if (result.type === 'redirect') {
+					window.location.href = result.location;
+				}
+			};
+		}} class="space-y-5">
 			<div>
 				<label class="block text-sm font-medium text-purple-200 mb-2">Email</label>
 				<input
@@ -101,6 +112,19 @@
 		</form>
 		{#if form?.message}
 			<p class="text-red-400 text-center mt-4 text-sm">{form.message}</p>
+		{/if}
+		{#if message === 'verification-sent' && email}
+			<div class="mt-6 p-4 bg-green-500/20 border border-green-500/30 rounded-xl backdrop-blur-sm">
+				<div class="flex items-center gap-3 text-green-300">
+					<svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+					</svg>
+					<div>
+						<p class="font-medium">Verification email sent!</p>
+						<p class="text-sm text-green-300/70">We've sent a verification link to <span class="font-semibold">{email}</span>. Check your inbox and click the link to verify your email.</p>
+					</div>
+				</div>
+			</div>
 		{/if}
 	</main>
 </div>

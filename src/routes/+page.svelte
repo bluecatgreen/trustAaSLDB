@@ -13,6 +13,8 @@
 	let registerError = $state('');
 	let transactionMessage = $state('');
 	let transactionSuccess = $state(false);
+	let verificationEmail = $state('');
+	let showVerificationMessage = $state(false);
 
 	// Close modal when user is logged in
 	$effect(() => {
@@ -90,6 +92,24 @@
 </svelte:head>
 
 <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 font-['Inter']">
+	{#if showVerificationMessage && verificationEmail}
+		<div class="max-w-6xl mx-auto px-6 pt-6">
+			<div class="p-4 bg-green-500/20 border border-green-500/30 rounded-xl backdrop-blur-sm relative">
+				<div class="flex items-center gap-3 text-green-300">
+					<svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+					</svg>
+					<div>
+						<p class="font-medium">Verification email sent!</p>
+						<p class="text-sm text-green-300/70">We've sent a verification link to <span class="font-semibold">{verificationEmail}</span>. Check your inbox and click the link to verify your email.</p>
+					</div>
+				</div>
+				<button onclick={() => { showVerificationMessage = false; }} class="absolute top-4 right-4 text-green-300 hover:text-white">
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+				</button>
+			</div>
+		</div>
+	{/if}
 	<!-- Header -->
 	<header class="border-b border-white/10 bg-white/5 backdrop-blur-sm">
 		<nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -535,6 +555,19 @@
 					return async ({ result }: { result: ActionResult }) => {
 						if (result.type === 'failure') {
 							registerError = result.data?.message || 'Registration failed';
+						} else if (result.type === 'redirect') {
+							// Extract email from redirect URL
+							const location = result.location;
+							const url = new URL(location, window.location.origin);
+							const email = url.searchParams.get('email');
+							const message = url.searchParams.get('message');
+							if (message === 'verification-sent' && email) {
+								verificationEmail = email;
+								showVerificationMessage = true;
+								showRegisterModal = false;
+							} else {
+								window.location.href = location;
+							}
 						} else {
 							registerError = '';
 						}
