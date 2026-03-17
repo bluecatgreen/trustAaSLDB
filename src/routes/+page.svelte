@@ -119,6 +119,7 @@
 			{#if data.user}
 				<div class="flex items-center gap-4">
 					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">Transactions</a>
+					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Ratings</a>
 					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
 					<form method="post" action="/demo/better-auth?/signOut" use:enhance>
 						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
