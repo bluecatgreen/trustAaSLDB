@@ -60,6 +60,11 @@
 					class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all"
 					placeholder="••••••••"
 				/>
+				<div class="mt-2 text-right">
+					<a href="/demo/better-auth/forgot-password" class="text-sm text-pink-400 hover:text-pink-300 transition-colors">
+						Forgot password?
+					</a>
+				</div>
 			</div>
 			<div>
 				<label class="block text-sm font-medium text-purple-200 mb-2">Name (for registration)</label>

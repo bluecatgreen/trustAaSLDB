@@ -7,7 +7,7 @@ import { db } from '$lib/server/db';
 import { user, verification } from '$lib/server/db/auth.schema';
 import * as schema from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
-import { sendVerificationEmail } from '$lib/server/email';
+import { sendVerificationEmail, sendPasswordResetEmail } from '$lib/server/email';
 
 export const auth = betterAuth({
 	baseURL: env.ORIGIN,
@@ -16,6 +16,18 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 		requireEmailVerification: true,
+		sendResetPassword: async ({ user: u, token, url }) => {
+			const identifier = `email:${u.email}`;
+			await db.insert(verification).values({
+				id: crypto.randomUUID(),
+				identifier,
+				value: token,
+				expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+				createdAt: new Date(),
+				updatedAt: new Date()
+			}).onConflictDoNothing();
+			await sendPasswordResetEmail(u.email, token, url);
+		},
 		additionalFields: {
 			isBusiness: {
 				type: 'boolean',
@@ -30,22 +42,22 @@ export const auth = betterAuth({
 				type: 'string',
 				required: false
 			}
-		}
-	},
-	hooks: {
-		afterSignUp: async ({ user: newUser }) => {
-			const isBusiness = (newUser as any).isBusiness;
-			const businessName = (newUser as any).businessName;
-			const businessAddress = (newUser as any).businessAddress;
+		},
+		hooks: {
+			afterSignUp: async ({ user: newUser }) => {
+				const isBusiness = (newUser as any).isBusiness;
+				const businessName = (newUser as any).businessName;
+				const businessAddress = (newUser as any).businessAddress;
 
-			if (isBusiness || businessName || businessAddress) {
-				await db.update(user)
-					.set({
-						isBusiness: isBusiness ?? false,
-						businessName: businessName ?? null,
-						businessAddress: businessAddress ?? null
-					})
-					.where(eq(user.id, newUser.id));
+				if (isBusiness || businessName || businessAddress) {
+					await db.update(user)
+						.set({
+							isBusiness: isBusiness ?? false,
+							businessName: businessName ?? null,
+							businessAddress: businessAddress ?? null
+						})
+						.where(eq(user.id, newUser.id));
+				}
 			}
 		}
 	},
