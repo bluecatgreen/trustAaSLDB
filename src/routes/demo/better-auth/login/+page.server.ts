@@ -28,6 +28,7 @@ export const actions: Actions = {
 				}
 			});
 		} catch (error) {
+			console.error('Signin error:', error);
 			if (error instanceof APIError) {
 				return fail(400, { message: error.message || 'Signin failed' });
 			}
@@ -68,6 +69,7 @@ export const actions: Actions = {
 					.where(eq(user.id, newUser.id));
 			}
 		} catch (error) {
+			console.error('Signup error:', error);
 			if (error instanceof APIError) {
 				return fail(400, { message: error.message || 'Registration failed' });
 			}
