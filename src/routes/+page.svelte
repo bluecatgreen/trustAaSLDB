@@ -125,12 +125,12 @@
 	<header class="border-b border-white/10 bg-white/5 backdrop-blur-sm">
 		<nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 			<a href="/" class="font-['Space_Grotesk'] text-xl font-bold text-white">
-				Trust<span class="text-pink-400">AA</span>SLDB
+				Sharing<span class="text-pink-400">Business</span>Experiences
 			</a>
 			{#if data.user}
 				<div class="flex items-center gap-4">
-					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">Transactions</a>
-					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Ratings</a>
+					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
+					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
 					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
 					<form method="post" action="/demo/better-auth?/signOut" use:enhance>
 						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
@@ -160,7 +160,7 @@
 	<main class="max-w-4xl mx-auto px-6 py-12">
 		<div class="text-center space-y-8 mb-12">
 			<h1 class="font-['Space_Grotesk'] text-5xl md:text-6xl font-bold text-white tracking-tight">
-				Trust <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">Transaction</span>
+				Register<span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">Business Transaction</span>
 			</h1>
 		</div>
 

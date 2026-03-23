@@ -42,7 +42,7 @@
 	<header class="border-b border-white/10 bg-white/5 backdrop-blur-sm">
 		<nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 			<a href="/" class="font-['Space_Grotesk'] text-xl font-bold text-white">
-				Trust<span class="text-pink-400">AA</span>SLDB
+				Sharing<span class="text-pink-400">Business</span>Experiences
 			</a>
 
 			{#if data.user}

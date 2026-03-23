@@ -65,14 +65,14 @@
 	<header class="border-b border-white/10 bg-white/5 backdrop-blur-sm">
 		<nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 			<a href="/" class="font-['Space_Grotesk'] text-xl font-bold text-white">
-				Trust<span class="text-pink-400">AA</span>SLDB
+				Sharing<span class="text-pink-400">Business</span>Experiences
 			</a>
 
 			{#if data.user}
 				<div class="flex items-center gap-4">
 					<a href="/" class="text-purple-300 hover:text-white transition-colors text-sm">Home</a>
-					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">Transactions</a>
-					<a href="/ratings" class="text-white font-medium text-sm">Ratings</a>
+					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
+					<a href="/ratings" class="text-white font-medium text-sm">Search Ratings</a>
 					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
 					<form method="post" action="/demo/better-auth?/signOut">
 						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
