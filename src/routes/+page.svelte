@@ -53,6 +53,13 @@
 	let searchResults: Array<{ id: string; name: string; businessName: string | null }> = $state([]);
 	let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
+	function handleBlur() {
+		// Delay hiding dropdown to allow click event on dropdown items
+		setTimeout(() => {
+			showDropdown = false;
+		}, 200);
+	}
+
 	function handleSearch(query: string) {
 		searchQuery = query;
 		if (searchTimeout) clearTimeout(searchTimeout);
