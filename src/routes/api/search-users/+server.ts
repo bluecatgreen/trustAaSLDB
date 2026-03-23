@@ -4,9 +4,12 @@ import { user } from '$lib/server/db/schema';
 import { sql } from 'drizzle-orm';
 
 export async function POST({ request, locals }) {
+	console.log('[search] locals.user:', locals.user);
+	console.log('[search] cookies:', request.headers.get('cookie')?.substring(0, 50));
+
 	const currentUser = locals.user;
 	if (!currentUser) {
-		return json({ users: [] }, { status: 401 });
+		return json({ users: [], error: 'No session', debug: { hasUser: false } }, { status: 200 });
 	}
 
 	const formData = await request.formData();
@@ -17,10 +20,8 @@ export async function POST({ request, locals }) {
 	}
 
 	try {
-		// Search by name or business name (case-insensitive)
 		const searchPattern = `%${query}%`;
 
-		// Use raw SQL to properly handle NULL businessName
 		const users = await db
 			.select({
 				id: user.id,
@@ -36,7 +37,7 @@ export async function POST({ request, locals }) {
 
 		return json({ users });
 	} catch (error) {
-		console.error('Search error:', error);
-		return json({ users: [], error: 'Search failed' }, { status: 500 });
+		console.error('[search] Error:', error);
+		return json({ users: [], error: String(error) }, { status: 500 });
 	}
 }

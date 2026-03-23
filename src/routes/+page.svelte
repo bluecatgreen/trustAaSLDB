@@ -77,9 +77,12 @@
 			const response = await fetch('/api/search-users', {
 				method: 'POST',
 				body: formData,
-				credentials: 'same-origin'
+				credentials: 'include'
 			});
 			const result = await response.json();
+			if (result.error) {
+				console.error('Search error:', result.error);
+			}
 			searchResults = result.users || [];
 			showDropdown = searchResults.length > 0;
 		}, 300);
