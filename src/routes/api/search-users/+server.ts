@@ -4,19 +4,21 @@ import { user } from '$lib/server/db/schema';
 
 export async function POST({ request, locals }) {
 	const currentUser = locals.user;
+	console.log('[search] currentUser:', JSON.stringify(currentUser));
+
 	if (!currentUser) {
-		return json({ users: [], error: 'No session' }, { status: 200 });
+		return json({ users: [], debug: 'no user in locals' });
 	}
 
 	const formData = await request.formData();
 	const query = formData.get('query') as string;
+	console.log('[search] query:', query);
 
 	if (!query || query.length < 1) {
 		return json({ users: [] });
 	}
 
 	try {
-		// Simple search - get all users except current user, then filter in JS
 		const allUsers = await db
 			.select({
 				id: user.id,
@@ -24,10 +26,11 @@ export async function POST({ request, locals }) {
 				email: user.email,
 				businessName: user.businessName
 			})
-			.from(user)
-			.limit(50);
+			.from(user);
 
-		// Filter by query in JavaScript (case-insensitive)
+		console.log('[search] total users in db:', allUsers.length);
+		console.log('[search] all users:', JSON.stringify(allUsers));
+
 		const searchLower = query.toLowerCase();
 		const filteredUsers = allUsers
 			.filter(u => u.id !== currentUser.id)
@@ -37,7 +40,9 @@ export async function POST({ request, locals }) {
 			)
 			.slice(0, 10);
 
-		return json({ users: filteredUsers });
+		console.log('[search] filtered:', filteredUsers.length);
+
+		return json({ users: filteredUsers, debug: { totalInDb: allUsers.length, currentUserId: currentUser.id } });
 	} catch (error) {
 		console.error('[search] Error:', error);
 		return json({ users: [], error: String(error) }, { status: 500 });
