@@ -76,7 +76,8 @@
 
 			const response = await fetch('/api/search-users', {
 				method: 'POST',
-				body: formData
+				body: formData,
+				credentials: 'same-origin'
 			});
 			const result = await response.json();
 			searchResults = result.users || [];
