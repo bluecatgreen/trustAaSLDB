@@ -11,7 +11,24 @@ export const load = async ({ locals }) => {
 	const userId = locals.user.id;
 
 	const transactions = await db
-		.select()
+		.select({
+			id: businessTransaction.id,
+			creatorId: businessTransaction.creatorId,
+			creatorRole: businessTransaction.creatorRole,
+			providerId: businessTransaction.providerId,
+			providerName: businessTransaction.providerName,
+			providerRating: businessTransaction.providerRating,
+			providerRatingFeedback: businessTransaction.providerRatingFeedback,
+			receiverId: businessTransaction.receiverId,
+			receiverName: businessTransaction.receiverName,
+			receiverRating: businessTransaction.receiverRating,
+			receiverRatingFeedback: businessTransaction.receiverRatingFeedback,
+			description: businessTransaction.description,
+			amount: businessTransaction.amount,
+			transactionStartDate: businessTransaction.transactionStartDate,
+			transactionEndDate: businessTransaction.transactionEndDate,
+			createdAt: businessTransaction.createdAt
+		})
 		.from(businessTransaction)
 		.where(
 			or(

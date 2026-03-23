@@ -4,6 +4,7 @@ import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  businessName: text("business_name"),
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "boolean" })
     .default(false)
@@ -16,11 +17,6 @@ export const user = sqliteTable("user", {
     .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-  isBusiness: integer("is_business", { mode: "boolean" })
-    .default(false)
-    .notNull(),
-  businessName: text("business_name"),
-  businessAddress: text("business_address"),
 });
 
 export const session = sqliteTable(
