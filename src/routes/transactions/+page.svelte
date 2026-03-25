@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+	let mobileMenuOpen = $state(false);
 
 	function getRole(transaction: any, userId: string): string {
 		if (transaction.creatorId === userId) {
@@ -45,18 +46,60 @@
 				Sharing<span class="text-pink-400">Business</span>Experiences
 			</a>
 
+			<!-- Mobile menu button -->
+			<button
+				type="button"
+				onclick={() => { mobileMenuOpen = !mobileMenuOpen; }}
+				class="md:hidden p-2 text-purple-300 hover:text-white"
+			>
+				{#if mobileMenuOpen}
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				{:else}
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				{/if}
+			</button>
+
 			{#if data.user}
-				<div class="flex items-center gap-2 sm:gap-4">
-					<a href="/" class="text-purple-300 hover:text-white transition-colors text-xs sm:text-sm">Home</a>
-					<a href="/transactions" class="text-white font-medium text-xs sm:text-sm">Transactions</a>
-					<span class="text-purple-200 text-xs sm:text-sm hidden sm:inline">Welcome, {data.user.name}</span>
+				<div class="hidden md:flex items-center gap-4">
+					<a href="/" class="text-purple-300 hover:text-white transition-colors text-sm">Home</a>
+					<a href="/transactions" class="text-white font-medium text-sm">Transactions</a>
+					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Ratings</a>
+					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
+					<form method="post" action="/demo/better-auth?/signOut">
+						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
+					</form>
 				</div>
 			{:else}
-				<div class="flex items-center gap-4">
+				<div class="hidden md:flex items-center gap-4">
 					<a href="/demo/better-auth" class="text-purple-300 hover:text-white transition-colors text-sm">Sign In</a>
 				</div>
 			{/if}
 		</nav>
+
+		<!-- Mobile menu dropdown -->
+		{#if mobileMenuOpen}
+			<div class="md:hidden border-t border-white/10 bg-gray-900/95 backdrop-blur-sm">
+				{#if data.user}
+					<div class="px-4 py-4 space-y-3">
+						<span class="block text-purple-200 text-sm">Welcome, {data.user.name}</span>
+						<a href="/" class="block text-purple-300 hover:text-white transition-colors text-sm">Home</a>
+						<a href="/transactions" class="block text-white font-medium text-sm">Transactions</a>
+						<a href="/ratings" class="block text-purple-300 hover:text-white transition-colors text-sm">Ratings</a>
+						<form method="post" action="/demo/better-auth?/signOut">
+							<button class="block w-full text-left text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
+						</form>
+					</div>
+				{:else}
+					<div class="px-4 py-4 space-y-3">
+						<a href="/demo/better-auth" class="block text-purple-300 hover:text-white transition-colors text-sm">Sign In</a>
+					</div>
+				{/if}
+			</div>
+		{/if}
 	</header>
 
 	<main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
