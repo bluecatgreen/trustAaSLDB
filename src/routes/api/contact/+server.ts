@@ -1,28 +1,30 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { STATICFORMS_ACCESS_KEY } from '$env/static/private';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const formData = await request.formData();
+	const body = await request.json();
 
-	const accessKey = formData.get('accessKey') as string;
-	const subject = formData.get('subject') as string;
-	const message = formData.get('message') as string;
+	const subject = body.subject as string;
+	const message = body.message as string;
+	const email = body.email as string;
 
-	if (!accessKey || !subject || !message) {
+	if (!STATICFORMS_ACCESS_KEY || !subject || !message) {
 		return json({ success: false, error: 'Missing required fields' }, { status: 400 });
 	}
 
-	// Forward to staticforms
-	const staticFormsUrl = 'https://api.staticforms.xyz/submit';
+		// Forward to staticforms
+	const staticFormsUrl = 'https://api.staticforms.dev/submit';
 	const response = await fetch(staticFormsUrl, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({
-			accessKey,
+			apiKey: STATICFORMS_ACCESS_KEY,
 			subject,
-			message
+			message,
+			...(email && { replyTo: email })
 		})
 	});
 

@@ -17,7 +17,7 @@
 
 		const subject = formData.get('subject') as string;
 		const message = formData.get('message') as string;
-		const accessKey = formData.get('accessKey') as string;
+		const email = data.user?.email as string;
 
 		try {
 			const response = await fetch('/api/contact', {
@@ -25,7 +25,7 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ subject, message, accessKey })
+				body: JSON.stringify({ subject, message, email })
 			});
 
 			const result = await response.json();
@@ -58,13 +58,12 @@
 			</a>
 			<div class="hidden md:flex items-center gap-4">
 				<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
-				<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 				{#if data.user}
+					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
 					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
-				{:else}
-					<a href="/demo/better-auth/login" class="text-purple-300 hover:text-white transition-colors text-sm">Sign In</a>
 				{/if}
+				<a href="/demo/better-auth/login" class="text-purple-300 hover:text-white transition-colors text-sm">{data.user ? 'Sign Out' : 'Sign In'}</a>
 			</div>
 		</nav>
 	</header>
@@ -81,9 +80,6 @@
 				</div>
 			{:else}
 				<form onsubmit={handleSubmit} class="space-y-6">
-					<!-- StaticForms required field (hidden) -->
-					<input type="hidden" name="accessKey" value="YOUR_STATICFORMS_ACCESS_KEY" />
-
 					{#if error}
 						<div class="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
 							{error}

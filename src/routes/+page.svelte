@@ -160,7 +160,6 @@
 			{:else}
 				<div class="hidden md:flex items-center gap-4">
 					<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
-					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 					<button
 						type="button"
 						onclick={() => { showLoginModal = true; }}
@@ -196,7 +195,6 @@
 				{:else}
 					<div class="px-4 py-4 space-y-3">
 						<a href="/about" class="block text-purple-300 hover:text-white transition-colors text-sm">About</a>
-						<a href="/contact" class="block text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 						<button
 							type="button"
 							onclick={() => { showLoginModal = true; mobileMenuOpen = false; }}

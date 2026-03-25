@@ -19,13 +19,12 @@
 			</a>
 			<div class="hidden md:flex items-center gap-4">
 				<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
-				<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 				{#if data.user}
+					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
 					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
-				{:else}
-					<a href="/demo/better-auth/login" class="text-purple-300 hover:text-white transition-colors text-sm">Sign In</a>
 				{/if}
+				<a href="/demo/better-auth/login" class="text-purple-300 hover:text-white transition-colors text-sm">{data.user ? 'Sign Out' : 'Sign In'}</a>
 			</div>
 		</nav>
 	</header>
