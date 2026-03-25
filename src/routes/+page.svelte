@@ -15,6 +15,7 @@
 	let transactionSuccess = $state(false);
 	let verificationEmail = $state('');
 	let showVerificationMessage = $state(false);
+	let mobileMenuOpen = $state(false);
 
 	// Close modal when user is logged in
 	$effect(() => {
@@ -123,12 +124,30 @@
 	{/if}
 	<!-- Header -->
 	<header class="border-b border-white/10 bg-white/5 backdrop-blur-sm">
-		<nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-			<a href="/" class="font-['Space_Grotesk'] text-xl font-bold text-white">
+		<nav class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+			<a href="/" class="font-['Space_Grotesk'] text-lg sm:text-xl font-bold text-white">
 				Sharing<span class="text-pink-400">Business</span>Experiences
 			</a>
+
+			<!-- Mobile menu button -->
+			<button
+				type="button"
+				onclick={() => { mobileMenuOpen = !mobileMenuOpen; }}
+				class="md:hidden p-2 text-purple-300 hover:text-white"
+			>
+				{#if mobileMenuOpen}
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				{:else}
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+					</svg>
+				{/if}
+			</button>
+
 			{#if data.user}
-				<div class="flex items-center gap-4">
+				<div class="hidden md:flex items-center gap-4">
 					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
 					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
 					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
@@ -137,7 +156,7 @@
 					</form>
 				</div>
 			{:else}
-				<div class="flex items-center gap-4">
+				<div class="hidden md:flex items-center gap-4">
 					<button
 						type="button"
 						onclick={() => { showLoginModal = true; }}
@@ -155,18 +174,51 @@
 				</div>
 			{/if}
 		</nav>
+
+		<!-- Mobile menu dropdown -->
+		{#if mobileMenuOpen}
+			<div class="md:hidden border-t border-white/10 bg-gray-900/95 backdrop-blur-sm">
+				{#if data.user}
+					<div class="px-4 py-4 space-y-3">
+						<span class="block text-purple-200 text-sm">Welcome, {data.user.name}</span>
+						<a href="/transactions" class="block text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
+						<a href="/ratings" class="block text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
+						<form method="post" action="/demo/better-auth?/signOut" use:enhance>
+							<button class="block w-full text-left text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
+						</form>
+					</div>
+				{:else}
+					<div class="px-4 py-4 space-y-3">
+						<button
+							type="button"
+							onclick={() => { showLoginModal = true; mobileMenuOpen = false; }}
+							class="block w-full text-left text-purple-300 hover:text-white transition-colors text-sm"
+						>
+							Sign In
+						</button>
+						<button
+							type="button"
+							onclick={() => { showRegisterModal = true; mobileMenuOpen = false; }}
+							class="block w-full text-left px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white text-sm font-medium rounded-lg transition-all"
+						>
+							Register
+						</button>
+					</div>
+				{/if}
+			</div>
+		{/if}
 	</header>
 
-	<main class="max-w-4xl mx-auto px-6 py-12">
-		<div class="text-center space-y-8 mb-12">
-			<h1 class="font-['Space_Grotesk'] text-5xl md:text-6xl font-bold text-white tracking-tight">
+	<main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+		<div class="text-center space-y-6 sm:space-y-8 mb-8 sm:mb-12">
+			<h1 class="font-['Space_Grotesk'] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight">
 				Register<span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">Business Transaction</span>
 			</h1>
 		</div>
 
 		{#if data.user}
 			<!-- Logged in user - Business Transaction Form -->
-			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
+			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
 				<h2 class="font-['Space_Grotesk'] text-2xl font-bold text-white mb-6">Create Business Transaction</h2>
 				{#if transactionMessage}
 					<div class="mb-6 p-4 rounded-lg {transactionSuccess ? 'bg-green-500/20 border border-green-500/50 text-green-300' : 'bg-red-500/20 border border-red-500/50 text-red-300'}">
@@ -220,7 +272,7 @@
 					</div>
 
 					<!-- Other Party -->
-					<div class="grid md:grid-cols-2 gap-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 						<div class="relative">
 							<label class="block text-sm font-medium text-purple-200 mb-2">
 								{creatorRole === 'provider' ? 'Receiver' : 'Provider'} Name
@@ -403,7 +455,7 @@
 					</div>
 
 					<!-- Other Party -->
-					<div class="grid md:grid-cols-2 gap-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 						<div>
 							<label class="block text-sm font-medium text-purple-200 mb-2">Other Party Name</label>
 							<input
@@ -490,9 +542,9 @@
 <!-- Login Modal -->
 {#if showLoginModal}
 	<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onclick={() => { showLoginModal = false; loginError = ''; }}>
-		<div class="bg-gray-900 border border-white/10 rounded-2xl p-8 w-full max-w-md" onclick={(e) => e.stopPropagation()}>
-			<div class="flex items-center justify-between mb-6">
-				<h2 class="font-['Space_Grotesk'] text-2xl font-bold text-white">Sign In</h2>
+		<div class="bg-gray-900 border border-white/10 rounded-2xl p-6 sm:p-8 w-full max-w-md max-h-[90vh] overflow-y-auto" onclick={(e) => e.stopPropagation()}>
+			<div class="flex items-center justify-between mb-4 sm:mb-6">
+				<h2 class="font-['Space_Grotesk'] text-xl sm:text-2xl font-bold text-white">Sign In</h2>
 				<button onclick={() => { showLoginModal = false; loginError = ''; }} class="text-purple-400 hover:text-white">
 					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
 				</button>
@@ -553,9 +605,9 @@
 <!-- Register Modal -->
 {#if showRegisterModal}
 	<div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" onclick={() => { showRegisterModal = false; registerError = ''; }}>
-		<div class="bg-gray-900 border border-white/10 rounded-2xl p-8 w-full max-w-md" onclick={(e) => e.stopPropagation()}>
-			<div class="flex items-center justify-between mb-6">
-				<h2 class="font-['Space_Grotesk'] text-2xl font-bold text-white">Register</h2>
+		<div class="bg-gray-900 border border-white/10 rounded-2xl p-6 sm:p-8 w-full max-w-md max-h-[90vh] overflow-y-auto" onclick={(e) => e.stopPropagation()}>
+			<div class="flex items-center justify-between mb-4 sm:mb-6">
+				<h2 class="font-['Space_Grotesk'] text-xl sm:text-2xl font-bold text-white">Register</h2>
 				<button onclick={() => { showRegisterModal = false; registerError = ''; }} class="text-purple-400 hover:text-white">
 					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
 				</button>

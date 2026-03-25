@@ -59,15 +59,15 @@
 <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 font-['Inter']">
 	<!-- Header -->
 	<header class="border-b border-white/10 bg-white/5 backdrop-blur-sm">
-		<nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-			<a href="/" class="font-['Space_Grotesk'] text-xl font-bold text-white">
+		<nav class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+			<a href="/" class="font-['Space_Grotesk'] text-lg sm:text-xl font-bold text-white">
 				Sharing<span class="text-pink-400">Business</span>Experiences
 			</a>
 			{#if user}
-				<div class="flex items-center gap-4">
-					<a href="/" class="text-purple-300 hover:text-white transition-colors text-sm">Home</a>
-					<a href="/transactions" class="text-white font-medium text-sm">Transactions</a>
-					<span class="text-purple-200 text-sm">Welcome, {user.name}</span>
+				<div class="flex items-center gap-2 sm:gap-4">
+					<a href="/" class="text-purple-300 hover:text-white transition-colors text-xs sm:text-sm">Home</a>
+					<a href="/transactions" class="text-white font-medium text-xs sm:text-sm">Transactions</a>
+					<span class="text-purple-200 text-xs sm:text-sm hidden sm:inline">Welcome, {user.name}</span>
 				</div>
 			{:else}
 				<div class="flex items-center gap-4">
@@ -77,7 +77,7 @@
 		</nav>
 	</header>
 
-	<main class="max-w-4xl mx-auto px-6 py-12">
+	<main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
 		<a href="/transactions" class="inline-flex items-center gap-2 text-purple-300 hover:text-white transition-colors mb-6">
 			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />

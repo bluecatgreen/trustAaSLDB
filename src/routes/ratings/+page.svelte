@@ -9,6 +9,7 @@
 	let showDropdown = $state(false);
 	let searchResults: Array<{ id: string; name: string; email: string; image: string | null }> = $state([]);
 	let searchTimeout: ReturnType<typeof setTimeout> | null = null;
+	let mobileMenuOpen = $state(false);
 
 	function handleSearch(query: string) {
 		searchQuery = query;
@@ -63,19 +64,18 @@
 <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 font-['Inter']">
 	<!-- Header -->
 	<header class="border-b border-white/10 bg-white/5 backdrop-blur-sm">
-		<nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-			<a href="/" class="font-['Space_Grotesk'] text-xl font-bold text-white">
+		<nav class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+			<a href="/" class="font-['Space_Grotesk'] text-lg sm:text-xl font-bold text-white">
 				Sharing<span class="text-pink-400">Business</span>Experiences
 			</a>
 
 			{#if data.user}
-				<div class="flex items-center gap-4">
-					<a href="/" class="text-purple-300 hover:text-white transition-colors text-sm">Home</a>
-					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
-					<a href="/ratings" class="text-white font-medium text-sm">Search Ratings</a>
-					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
+				<div class="flex items-center gap-2 sm:gap-4">
+					<a href="/" class="text-purple-300 hover:text-white transition-colors text-xs sm:text-sm">Home</a>
+					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-xs sm:text-sm hidden sm:inline">My Transactions</a>
+					<a href="/ratings" class="text-white font-medium text-xs sm:text-sm">Ratings</a>
 					<form method="post" action="/demo/better-auth?/signOut">
-						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
+						<button class="text-xs sm:text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
 					</form>
 				</div>
 			{:else}
@@ -86,12 +86,12 @@
 		</nav>
 	</header>
 
-	<main class="max-w-4xl mx-auto px-6 py-12">
-		<h1 class="font-['Space_Grotesk'] text-4xl font-bold text-white mb-8">User Ratings</h1>
+	<main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+		<h1 class="font-['Space_Grotesk'] text-3xl sm:text-4xl font-bold text-white mb-6 sm:mb-8">User Ratings</h1>
 
 		{#if !data.user}
 			<!-- Not logged in -->
-			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
+			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
 				<p class="text-purple-200 text-lg mb-4">Please sign in to view user ratings.</p>
 				<a href="/demo/better-auth" class="inline-block px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-medium rounded-lg transition-colors">
 					Sign In
@@ -99,7 +99,7 @@
 			</div>
 		{:else}
 			<!-- Search for user -->
-			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8 mb-8">
+			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8 mb-6 sm:mb-8">
 				<h2 class="text-xl font-semibold text-white mb-4">Look Up User Ratings</h2>
 				<div class="relative">
 					<label class="block text-sm font-medium text-purple-200 mb-2">Search by name or email</label>
@@ -140,18 +140,18 @@
 
 			{#if data.ratings && data.targetUser}
 				<!-- User ratings display -->
-				<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
-					<div class="flex items-center gap-4 mb-8">
-						<div class="w-16 h-16 rounded-full bg-pink-500 flex items-center justify-center text-white text-2xl font-bold">
+				<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8">
+					<div class="flex items-center gap-4 mb-6 sm:mb-8">
+						<div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-pink-500 flex items-center justify-center text-white text-xl sm:text-2xl font-bold">
 							{data.targetUser.name.charAt(0).toUpperCase()}
 						</div>
 						<div>
-							<h2 class="text-2xl font-bold text-white">{data.targetUser.name}</h2>
-							<p class="text-purple-200">{data.targetUser.email}</p>
+							<h2 class="text-xl sm:text-2xl font-bold text-white">{data.targetUser.name}</h2>
+							<p class="text-purple-200 text-sm">{data.targetUser.email}</p>
 						</div>
 					</div>
 
-					<div class="grid md:grid-cols-2 gap-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
 						<!-- As Provider -->
 						<div class="bg-white/5 rounded-xl border border-white/10 p-6">
 							<h3 class="text-lg font-semibold text-white mb-4">As Provider</h3>
