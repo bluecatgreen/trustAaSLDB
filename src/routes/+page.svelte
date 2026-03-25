@@ -150,6 +150,8 @@
 				<div class="hidden md:flex items-center gap-4">
 					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
 					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
+					<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
+					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
 					<form method="post" action="/demo/better-auth?/signOut" use:enhance>
 						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
@@ -157,6 +159,8 @@
 				</div>
 			{:else}
 				<div class="hidden md:flex items-center gap-4">
+					<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
+					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 					<button
 						type="button"
 						onclick={() => { showLoginModal = true; }}
@@ -183,12 +187,16 @@
 						<span class="block text-purple-200 text-sm">Welcome, {data.user.name}</span>
 						<a href="/transactions" class="block text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
 						<a href="/ratings" class="block text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
+						<a href="/about" class="block text-purple-300 hover:text-white transition-colors text-sm">About</a>
+						<a href="/contact" class="block text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 						<form method="post" action="/demo/better-auth?/signOut" use:enhance>
 							<button class="block w-full text-left text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
 						</form>
 					</div>
 				{:else}
 					<div class="px-4 py-4 space-y-3">
+						<a href="/about" class="block text-purple-300 hover:text-white transition-colors text-sm">About</a>
+						<a href="/contact" class="block text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
 						<button
 							type="button"
 							onclick={() => { showLoginModal = true; mobileMenuOpen = false; }}
