@@ -4,6 +4,8 @@ import { db } from '$lib/server/db';
 import { businessTransaction, user } from '$lib/server/db/schema';
 import { desc, eq, ne } from 'drizzle-orm';
 import type { InferSelectModel } from 'drizzle-orm';
+import { sendTransactionNotificationEmail } from '$lib/server/email';
+import { env } from '$env/dynamic/private';
 
 type BusinessTransaction = InferSelectModel<typeof businessTransaction>;
 type User = InferSelectModel<typeof user>;
@@ -110,7 +112,31 @@ export const actions: Actions = {
 			transactionData.providerName = otherPartyName;
 		}
 
-		await db.insert(businessTransaction).values(transactionData);
+		const result = await db.insert(businessTransaction).values(transactionData).returning({ id: businessTransaction.id });
+
+		// Get the other party's email to send notification
+		const otherPartyDetails = await db
+			.select({ id: user.id, name: user.name, email: user.email })
+			.from(user)
+			.where(eq(user.id, otherPartyId))
+			.get();
+
+		// Send notification email to the other party
+		if (otherPartyDetails) {
+			const otherPartyRole = creatorRole === 'provider' ? 'receiver' : 'provider';
+			await sendTransactionNotificationEmail({
+				recipientEmail: otherPartyDetails.email,
+				recipientName: otherPartyDetails.name,
+				transactionId: result[0].id,
+				otherPartyName: currentUser.name,
+				otherPartyRole,
+				description,
+				amount,
+				transactionStartDate: new Date(transactionStartDate),
+				transactionEndDate: transactionEndDate ? new Date(transactionEndDate) : null,
+				origin: env.ORIGIN || 'http://localhost:5173'
+			});
+		}
 
 		return { success: true, message: 'Business transaction created successfully!' };
 	}

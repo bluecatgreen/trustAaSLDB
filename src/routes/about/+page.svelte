@@ -35,7 +35,7 @@
 
 			<div class="prose prose-invert prose-purple max-w-none">
 				<p class="text-purple-200 text-lg leading-relaxed mb-6">
-					[PLACEHOLDER: Add your about text here]
+					<!--[PLACEHOLDER: Add your about text here] -->
 				</p>
 
 				<p class="text-purple-200/80 leading-relaxed mb-4">

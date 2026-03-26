@@ -77,3 +77,69 @@ export async function sendPasswordResetEmail(email: string, token: string, url?:
 		`
 	});
 }
+
+export interface TransactionEmailData {
+	recipientEmail: string;
+	recipientName: string;
+	transactionId: string;
+	otherPartyName: string;
+	otherPartyRole: 'provider' | 'receiver';
+	description?: string | null;
+	amount?: string | null;
+	transactionStartDate: Date;
+	transactionEndDate?: Date | null;
+	origin: string;
+}
+
+export async function sendTransactionNotificationEmail(data: TransactionEmailData) {
+	const { recipientEmail, recipientName, transactionId, otherPartyName, otherPartyRole, description, amount, transactionStartDate, transactionEndDate, origin } = data;
+
+	const transactionUrl = `${origin}/transactions/${transactionId}`;
+	const roleLabel = otherPartyRole === 'provider' ? 'Provider' : 'Receiver';
+	const dateStr = transactionStartDate.toLocaleDateString();
+	const endDateStr = transactionEndDate ? ` - ${transactionEndDate.toLocaleDateString()}` : '';
+
+	const subject = `New Business Transaction: You've been added as a ${roleLabel}`;
+
+	if (!resend) {
+		console.log(`[DEV] Transaction notification email would be sent to: ${recipientEmail}`);
+		console.log(`[DEV] Transaction URL: ${transactionUrl}`);
+		return;
+	}
+
+	await resend.emails.send({
+		from: env.EMAIL_FROM || 'noreply@yourdomain.com',
+		to: recipientEmail,
+		subject,
+		html: `
+			<!DOCTYPE html>
+			<html>
+			<head>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			</head>
+			<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+				<h1 style="color: #2563eb;">New Business Transaction</h1>
+				<p>Hi ${recipientName},</p>
+				<p><strong>${otherPartyName}</strong> has created a business transaction with you and listed you as the <strong>${roleLabel}</strong>.</p>
+
+				<div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 20px 0;">
+					${description ? `<p style="margin-top: 0;"><strong>Description:</strong> ${description}</p>` : ''}
+					${amount ? `<p><strong>Amount:</strong> ${amount}</p>` : ''}
+					<p><strong>Date:</strong> ${dateStr}${endDateStr}</p>
+				</div>
+
+				<p>Please review this transaction and provide your feedback/rating for the other party. This helps build trust in our business community.</p>
+
+				<div style="text-align: center; margin: 30px 0;">
+					<a href="${transactionUrl}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Review Transaction</a>
+				</div>
+
+				<p style="color: #6b7280; font-size: 14px;">If you have any concerns about this transaction, please contact the other party directly or report any issues.</p>
+
+				<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+				<p style="color: #9ca3af; font-size: 12px;">This is an automated notification from TrustAA. Please do not reply to this email.</p>
+			</body>
+			</html>
+		`
+	});
+}
