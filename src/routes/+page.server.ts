@@ -49,10 +49,14 @@ export const actions: Actions = {
 		const otherPartyName = formData.get('otherPartyName') as string;
 		const description = formData.get('description') as string;
 		const amount = formData.get('amount') as string;
+		const currency = formData.get('currency') as string;
 		const transactionStartDate = formData.get('transactionStartDate') as string;
 		const transactionEndDate = formData.get('transactionEndDate') as string;
 		const rating = formData.get('rating') as string;
 		const ratingFeedback = formData.get('ratingFeedback') as string;
+
+		// Combine amount and currency (format: "100.00 USD")
+		const amountWithCurrency = amount && currency ? `${amount} ${currency}` : (amount || null);
 
 		console.log('[DEBUG] otherPartyId:', JSON.stringify(otherPartyId), '| otherPartyName:', otherPartyName);
 
@@ -91,7 +95,7 @@ export const actions: Actions = {
 			creatorId: currentUser.id,
 			creatorRole,
 			description: description || null,
-			amount: amount || null,
+			amount: amountWithCurrency,
 			transactionStartDate: new Date(transactionStartDate),
 			transactionEndDate: transactionEndDate ? new Date(transactionEndDate) : null,
 		};
@@ -131,7 +135,7 @@ export const actions: Actions = {
 				otherPartyName: currentUser.name,
 				otherPartyRole,
 				description,
-				amount,
+				amount: amountWithCurrency,
 				transactionStartDate: new Date(transactionStartDate),
 				transactionEndDate: transactionEndDate ? new Date(transactionEndDate) : null,
 				origin: env.ORIGIN || 'http://localhost:5173'

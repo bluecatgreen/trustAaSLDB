@@ -30,17 +30,33 @@
 	let otherPartyName = $state('');
 	let otherPartyId = $state('');
 	let rating = $state(5);
+	let currency = $state('USD');
+	let currencyGuest = $state('USD');
+
+	// Supported currencies for English-speaking countries
+	const currencies = [
+		{ code: 'USD', name: 'USD - US Dollar', symbol: '$' },
+		{ code: 'GBP', name: 'GBP - British Pound', symbol: '£' },
+		{ code: 'EUR', name: 'EUR - Euro', symbol: '€' },
+		{ code: 'INR', name: 'INR - Indian Rupee', symbol: '₹' },
+		{ code: 'CHF', name: 'CHF - Swiss Franc', symbol: 'Fr' },
+		{ code: 'CAD', name: 'CAD - Canadian Dollar', symbol: 'C$' },
+		{ code: 'AUD', name: 'AUD - Australian Dollar', symbol: 'A$' }
+	];
 
 	function resetTransactionForm() {
 		creatorRole = 'provider';
 		otherPartyName = '';
 		otherPartyId = '';
 		rating = 5;
+		currency = 'USD';
+		currencyGuest = 'USD';
 		searchQuery = '';
 		searchResults = [];
 		// Reset form input fields after a small delay to ensure DOM is updated
 		setTimeout(() => {
 			document.querySelectorAll('input[name="amount"]').forEach((el) => (el as HTMLInputElement).value = '');
+			document.querySelectorAll('input[name="currency"]').forEach((el) => (el as HTMLSelectElement).value = 'USD');
 			document.querySelectorAll('input[name="transactionStartDate"]').forEach((el) => (el as HTMLInputElement).value = '');
 			document.querySelectorAll('input[name="transactionEndDate"]').forEach((el) => (el as HTMLInputElement).value = '');
 			document.querySelectorAll('textarea[name="description"]').forEach((el) => (el as HTMLTextAreaElement).value = '');
@@ -315,14 +331,26 @@
 							{/if}
 						</div>
 						<div>
-							<label class="block text-sm font-medium text-purple-200 mb-2">Amount (USD)</label>
-							<input
-								type="number"
-								name="amount"
-								step="0.01"
-								class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all"
-								placeholder="0.00"
-							/>
+							<label class="block text-sm font-medium text-purple-200 mb-2">Amount</label>
+							<div class="grid grid-cols-2 gap-2">
+								<input
+									type="number"
+									name="amount"
+									step="0.01"
+									required
+									class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all"
+									placeholder="0.00"
+								/>
+								<select
+									name="currency"
+									bind:value={currency}
+									class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all"
+								>
+									{#each currencies as curr}
+										<option value={curr.code} class="bg-gray-800">{curr.name}</option>
+									{/each}
+								</select>
+							</div>
 						</div>
 					</div>
 
@@ -473,14 +501,26 @@
 							/>
 						</div>
 						<div>
-							<label class="block text-sm font-medium text-purple-200 mb-2">Amount (USD)</label>
-							<input
-								type="number"
-								name="amount"
-								step="0.01"
-								class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all"
-								placeholder="0.00"
-							/>
+							<label class="block text-sm font-medium text-purple-200 mb-2">Amount</label>
+							<div class="grid grid-cols-2 gap-2">
+								<input
+									type="number"
+									name="amount"
+									step="0.01"
+									required
+									class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all"
+									placeholder="0.00"
+								/>
+								<select
+									name="currency"
+									bind:value={currencyGuest}
+									class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all"
+								>
+									{#each currencies as curr}
+										<option value={curr.code} class="bg-gray-800">{curr.name}</option>
+									{/each}
+								</select>
+							</div>
 						</div>
 					</div>
 

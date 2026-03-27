@@ -36,8 +36,26 @@
 		});
 	}
 
+	// Currency symbols map
+	const currencySymbols: Record<string, string> = {
+		USD: '$',
+		GBP: '£',
+		EUR: '€',
+		INR: '₹',
+		CHF: 'Fr',
+		CAD: 'C$',
+		AUD: 'A$'
+	};
+
 	function formatAmount(amount: string | null): string {
 		if (!amount) return '-';
+		// Format is "100.00 USD" - parse to show properly
+		const parts = amount.split(' ');
+		if (parts.length >= 2) {
+			const currencyCode = parts[parts.length - 1];
+			const currencySymbol = currencySymbols[currencyCode] || currencyCode + ' ';
+			return `${currencySymbol}${parts.slice(0, -1).join(' ')}`;
+		}
 		return `$${amount}`;
 	}
 
