@@ -3,12 +3,14 @@
 	import { invalidateAll } from '$app/navigation';
 	import type { PageData } from './$types';
 	import type { ActionResult } from '@sveltejs/kit';
+	import AddressValidator from '$lib/components/AddressValidator.svelte';
 
 	let { data }: { data: PageData } = $props();
 
 	let showLoginModal = $state(false);
 	let showRegisterModal = $state(false);
 	let isBusiness = $state(false);
+	let businessAddress = $state('');
 	let loginError = $state('');
 	let registerError = $state('');
 	let transactionMessage = $state('');
@@ -740,15 +742,8 @@
 							placeholder="Your business name"
 						/>
 					</div>
-					<div>
-						<label class="block text-sm font-medium text-purple-200 mb-2">Business Address</label>
-						<textarea
-							name="businessAddress"
-							rows="2"
-							class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none transition-all resize-none"
-							placeholder="Full business address"
-						></textarea>
-					</div>
+					<AddressValidator bind:businessAddress label="Business Address" />
+						<input type="hidden" name="businessAddress" value={businessAddress} />
 				{/if}
 				<button
 					type="submit"

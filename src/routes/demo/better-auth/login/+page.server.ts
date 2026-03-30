@@ -45,7 +45,6 @@ export const actions: Actions = {
 		const isBusiness = formData.get('isBusiness') === 'on';
 		const businessName = formData.get('businessName')?.toString() ?? '';
 		const businessAddress = formData.get('businessAddress')?.toString() ?? '';
-
 		try {
 			const { user: newUser } = await auth.api.signUpEmail({
 				body: {

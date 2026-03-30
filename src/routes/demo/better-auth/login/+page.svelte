@@ -2,10 +2,12 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import type { ActionData } from './$types';
+	import AddressValidator from '$lib/components/AddressValidator.svelte';
 
 	let { form }: { form: ActionData } = $props();
 
 	let isBusiness = $state(false);
+	let businessAddress = $state('');
 
 	const message = $derived($page.url.searchParams.get('message'));
 	const email = $derived($page.url.searchParams.get('email'));
@@ -94,15 +96,8 @@
 						placeholder="Your business name"
 					/>
 				</div>
-				<div>
-					<label class="block text-sm font-medium text-purple-200 mb-2">Business Address</label>
-					<textarea
-						name="businessAddress"
-						rows="2"
-						class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 focus:outline-none backdrop-blur-sm transition-all resize-none"
-						placeholder="Full business address"
-					></textarea>
-				</div>
+				<AddressValidator bind:businessAddress label="Business Address" />
+				<input type="hidden" name="businessAddress" value={businessAddress} />
 			{/if}
 			<div class="flex gap-3 pt-2">
 				<button class="flex-1 px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:-translate-y-1"
