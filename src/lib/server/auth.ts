@@ -41,6 +41,11 @@ export const auth = betterAuth({
 			businessAddress: {
 				type: 'string',
 				required: false
+			},
+			isAdmin: {
+				type: 'boolean',
+				defaultValue: false,
+				required: false
 			}
 		},
 		hooks: {
