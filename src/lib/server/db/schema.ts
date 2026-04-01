@@ -42,4 +42,27 @@ export const businessTransaction = sqliteTable('business_transaction', {
 		.$defaultFn(() => new Date())
 });
 
+export const market = sqliteTable('market', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	name: text('name'),
+	country: text('country'),
+	countryCode: text('country_code'),
+	state: text('state'),
+	city: text('city'),
+	suburb: text('suburb'),
+	neighbourhood: text('neighbourhood'),
+	road: text('road'),
+	postcode: text('postcode'),
+	houseNumber: text('house_number'),
+	displayName: text('display_name'),
+	lat: text('lat'),
+	lon: text('lon'),
+	uniqueFields: text('unique_fields'), // JSON array of field names used for uniqueness
+	createdAt: integer('created_at', { mode: 'timestamp' })
+		.$defaultFn(() => new Date()),
+	creatorId: text('creator_id').references(() => user.id)
+});
+
 export * from './auth.schema';
