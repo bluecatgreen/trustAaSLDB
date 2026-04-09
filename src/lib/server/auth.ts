@@ -49,8 +49,8 @@ export const auth = betterAuth({
 			}
 		},
 		hooks: {
-			afterSignUp: async ({ user: newUser }) => {
-				const isBusiness = (newUser as any).isBusiness;
+			afterSignUp: async ({ user: newUser }: { user: { id: string } & Record<string, unknown> }) => {
+				const isBusiness = newUser.isBusiness;
 				const businessName = (newUser as any).businessName;
 				const businessAddress = (newUser as any).businessAddress;
 

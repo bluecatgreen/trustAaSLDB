@@ -65,4 +65,28 @@ export const market = sqliteTable('market', {
 	creatorId: text('creator_id').references(() => user.id)
 });
 
+export const listing = sqliteTable('listing', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text('user_id').references(() => user.id),
+	title: text('title').notNull(),
+	description: text('description'),
+	category: text('category'), // e.g., "products", "services"
+	amount: text('amount'), // cost as string
+	currency: text('currency').default('USD'),
+	// Inline location fields
+	locationName: text('location_name'),
+	locationAddress: text('location_address'),
+	locationLat: text('location_lat'),
+	locationLon: text('location_lon'),
+	listingStartDate: integer('listing_start_date', { mode: 'timestamp' }),
+	listingEndDate: integer('listing_end_date', { mode: 'timestamp' }),
+	status: text('status').default('active'), // 'active', 'inactive'
+	createdAt: integer('created_at', { mode: 'timestamp' })
+		.$defaultFn(() => new Date()),
+	updatedAt: integer('updated_at', { mode: 'timestamp' })
+		.$defaultFn(() => new Date())
+});
+
 export * from './auth.schema';

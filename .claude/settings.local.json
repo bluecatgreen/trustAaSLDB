@@ -27,7 +27,10 @@
       "Bash(git stash:*)",
       "Bash(bash)",
       "Bash(head:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm list:*)",
+      "Bash(npm show:*)",
+      "Bash(npm search:*)"
     ]
   }
 }
