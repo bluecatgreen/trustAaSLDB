@@ -167,10 +167,11 @@
 			{#if data.user}
 				<div class="hidden md:flex items-center gap-4">
 					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
-					<a href="/listing" class="text-purple-300 hover:text-white transition-colors text-sm">Listing</a>
 					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
-					<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
+					<a href="/listing" class="text-purple-300 hover:text-white transition-colors text-sm">My Listings</a>
+					<a href="/listing-search" class="text-purple-300 hover:text-white transition-colors text-sm">Search Listings</a>
 					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
+					<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
 					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
 					<form method="post" action="/demo/better-auth?/signOut" use:enhance>
 						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
@@ -205,6 +206,7 @@
 						<span class="block text-purple-200 text-sm">Welcome, {data.user.name}</span>
 						<a href="/transactions" class="block text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
 						<a href="/listing" class="block text-purple-300 hover:text-white transition-colors text-sm">Listing</a>
+						<a href="/listing-search" class="block text-purple-300 hover:text-white transition-colors text-sm">Search Listings</a>
 						<a href="/ratings" class="block text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
 						<a href="/about" class="block text-purple-300 hover:text-white transition-colors text-sm">About</a>
 						<a href="/contact" class="block text-purple-300 hover:text-white transition-colors text-sm">Contact</a>

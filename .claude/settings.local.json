@@ -30,7 +30,10 @@
       "Bash(ls:*)",
       "Bash(npm list:*)",
       "Bash(npm show:*)",
-      "Bash(npm search:*)"
+      "Bash(npm search:*)",
+      "Bash(python3:*)",
+      "Bash(cp /home/rjankir/svelte/trustAaSLDB/src/routes/listing-search/+page.server.ts /tmp/listing-search-server.ts)",
+      "Read(//tmp/**)"
     ]
   }
 }

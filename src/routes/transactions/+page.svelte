@@ -84,8 +84,7 @@
 			{#if data.user}
 				<div class="hidden md:flex items-center gap-4">
 					<a href="/" class="text-purple-300 hover:text-white transition-colors text-sm">Home</a>
-					<a href="/transactions" class="text-white font-medium text-sm">Transactions</a>
-					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Ratings</a>
+					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
 					<span class="text-purple-200 text-sm">Welcome, {data.user.name}</span>
 					<form method="post" action="/demo/better-auth?/signOut">
 						<button class="text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
@@ -103,10 +102,11 @@
 			<div class="md:hidden border-t border-white/10 bg-gray-900/95 backdrop-blur-sm">
 				{#if data.user}
 					<div class="px-4 py-4 space-y-3">
-						<span class="block text-purple-200 text-sm">Welcome, {data.user.name}</span>
-						<a href="/" class="block text-purple-300 hover:text-white transition-colors text-sm">Home</a>
-						<a href="/transactions" class="block text-white font-medium text-sm">Transactions</a>
-						<a href="/ratings" class="block text-purple-300 hover:text-white transition-colors text-sm">Ratings</a>
+					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
+					<a href="/listing" class="text-purple-300 hover:text-white transition-colors text-sm">My Listings</a>
+					<a href="/listing-search" class="text-purple-300 hover:text-white transition-colors text-sm">Search Listings</a>
+					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
+					<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
 						<form method="post" action="/demo/better-auth?/signOut">
 							<button class="block w-full text-left text-sm text-purple-300 hover:text-white transition-colors">Sign Out</button>
 						</form>

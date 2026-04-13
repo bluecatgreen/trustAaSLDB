@@ -123,8 +123,8 @@
 
 			{#if data.user}
 				<div class="hidden md:flex items-center gap-4">
+				    <a href="/" class="text-purple-300 hover:text-white transition-colors text-sm">Home</a>
 					<a href="/transactions" class="text-purple-300 hover:text-white transition-colors text-sm">My Transactions</a>
-					<a href="/listing" class="text-purple-300 hover:text-white transition-colors text-sm">Listing</a>
 					<a href="/ratings" class="text-purple-300 hover:text-white transition-colors text-sm">Search Ratings</a>
 					<a href="/about" class="text-purple-300 hover:text-white transition-colors text-sm">About</a>
 					<a href="/contact" class="text-purple-300 hover:text-white transition-colors text-sm">Contact</a>
