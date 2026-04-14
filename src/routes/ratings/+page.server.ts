@@ -18,21 +18,6 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 	// Get average rating as provider (when other users rated this user as provider)
 	const providerResult = await db
 		.select({
-			avgRating: sql<number>`COALESCE(AVG(${businessTransaction.providerRating}), 0)`,
-			count: sql<number>`COUNT(*)`,
-			totalRating: sql<number>`SUM(${businessTransaction.providerRating})`
-		})
-		.from(businessTransaction)
-		.where(
-			and(
-				eq(businessTransaction.providerId, userId),
-				isNotNull(businessTransaction.providerRating)
-			)
-		);
-
-	// Get average rating as receiver (when other users rated this user as receiver)
-	const receiverResult = await db
-		.select({
 			avgRating: sql<number>`COALESCE(AVG(${businessTransaction.receiverRating}), 0)`,
 			count: sql<number>`COUNT(*)`,
 			totalRating: sql<number>`SUM(${businessTransaction.receiverRating})`
@@ -40,8 +25,23 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 		.from(businessTransaction)
 		.where(
 			and(
-				eq(businessTransaction.receiverId, userId),
+				eq(businessTransaction.providerId, userId),
 				isNotNull(businessTransaction.receiverRating)
+			)
+		);
+
+	// Get average rating as receiver (when other users rated this user as receiver)
+	const receiverResult = await db
+		.select({
+			avgRating: sql<number>`COALESCE(AVG(${businessTransaction.providerRating}), 0)`,
+			count: sql<number>`COUNT(*)`,
+			totalRating: sql<number>`SUM(${businessTransaction.providerRating})`
+		})
+		.from(businessTransaction)
+		.where(
+			and(
+				eq(businessTransaction.receiverId, userId),
+				isNotNull(businessTransaction.providerRating)
 			)
 		);
 
