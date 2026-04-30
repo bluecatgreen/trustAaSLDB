@@ -120,11 +120,11 @@ export const actions = {
 		const lon = formData.get('lon') as string || null;
 		const displayName = formData.get('displayName') as string || null;
 
-		// Generate a name from the selected unique fields
+		// Generate a name from the selected unique fields - neighbourhood first
 		const nameParts = [];
+		if (uniqueFields.includes('neighbourhood') && neighbourhood) nameParts.push(neighbourhood);
 		if (uniqueFields.includes('city') && city) nameParts.push(city);
 		else if (uniqueFields.includes('suburb') && suburb) nameParts.push(suburb);
-		else if (uniqueFields.includes('neighbourhood') && neighbourhood) nameParts.push(neighbourhood);
 
 		if (uniqueFields.includes('state') && state) nameParts.push(state);
 		if (uniqueFields.includes('country') && country) nameParts.push(country);

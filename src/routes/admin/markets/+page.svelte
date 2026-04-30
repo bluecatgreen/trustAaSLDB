@@ -9,6 +9,8 @@
 	let selectedFields = $state<string[]>([]);
 	let mobileMenuOpen = $state(false);
 	let showSuccess = $state(false);
+	let editableNeighbourhood = $state('');
+	let editableRoad = $state('');
 
 	// Available fields for selection
 	const availableFields = [
@@ -61,9 +63,21 @@
 			address = '';
 			addressData = null;
 			selectedFields = [];
+			editableNeighbourhood = '';
+			editableRoad = '';
 			setTimeout(() => {
 				showSuccess = false;
 			}, 3000);
+		}
+	});
+
+	// Populate editable fields when address is looked up
+	$effect(() => {
+		if (form?.address?.neighbourhood) {
+			editableNeighbourhood = form.address.neighbourhood;
+		}
+		if (form?.address?.street) {
+			editableRoad = form.address.street;
 		}
 	});
 </script>
@@ -205,12 +219,24 @@
 								<span class="text-white">{addr.suburb || '-'}</span>
 							</div>
 							<div class="bg-white/5 rounded-lg p-3">
-								<span class="text-purple-300 block text-xs">Neighbourhood</span>
-								<span class="text-white">{addr.neighbourhood || '-'}</span>
+								<label for="neighbourhood" class="text-purple-300 block text-xs mb-1">Neighbourhood</label>
+								<input
+									type="text"
+									id="neighbourhood"
+									bind:value={editableNeighbourhood}
+									placeholder="Enter neighbourhood (optional)"
+									class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-purple-300/50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+								/>
 							</div>
 							<div class="bg-white/5 rounded-lg p-3">
-								<span class="text-purple-300 block text-xs">Road</span>
-								<span class="text-white">{addr.street || '-'}</span>
+								<label for="road" class="text-purple-300 block text-xs mb-1">Road</label>
+								<input
+									type="text"
+									id="road"
+									bind:value={editableRoad}
+									placeholder="Enter road (optional)"
+									class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-purple-300/50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+								/>
 							</div>
 							<div class="bg-white/5 rounded-lg p-3">
 								<span class="text-purple-300 block text-xs">Postcode</span>
@@ -224,8 +250,8 @@
 							<input type="hidden" name="state" value={addr.state || ''} />
 							<input type="hidden" name="city" value={addr.city || ''} />
 							<input type="hidden" name="suburb" value={addr.suburb || ''} />
-							<input type="hidden" name="neighbourhood" value={addr.neighbourhood || ''} />
-							<input type="hidden" name="road" value={addr.street || ''} />
+							<input type="hidden" name="neighbourhood" value={editableNeighbourhood} />
+							<input type="hidden" name="road" value={editableRoad} />
 							<input type="hidden" name="houseNumber" value={addr.houseNumber || ''} />
 							<input type="hidden" name="postcode" value={addr.postalCode || ''} />
 							<input type="hidden" name="lat" value={addr.lat || ''} />
