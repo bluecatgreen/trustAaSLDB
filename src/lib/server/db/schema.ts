@@ -1,4 +1,5 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, index } from 'drizzle-orm/sqlite-core';
+import { relations } from 'drizzle-orm';
 import { user } from './auth.schema';
 
 export const task = sqliteTable('task', {
@@ -64,6 +65,43 @@ export const market = sqliteTable('market', {
 		.$defaultFn(() => new Date()),
 	creatorId: text('creator_id').references(() => user.id)
 });
+
+export const marketAdmin = sqliteTable(
+	'market_admin',
+	{
+		id: text('id')
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		marketId: text('market_id')
+			.notNull()
+			.references(() => market.id, { onDelete: 'cascade' }),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		assignedAt: integer('assigned_at', { mode: 'timestamp' })
+			.$defaultFn(() => new Date())
+	},
+	(table) => [
+		index('market_admin_market_idx').on(table.marketId),
+		index('market_admin_user_idx').on(table.userId)
+	]
+);
+
+// Relations
+export const marketRelations = relations(market, ({ many }) => ({
+	admins: many(marketAdmin)
+}));
+
+export const marketAdminRelations = relations(marketAdmin, ({ one }) => ({
+	market: one(market, {
+		fields: [marketAdmin.marketId],
+		references: [market.id]
+	}),
+	user: one(user, {
+		fields: [marketAdmin.userId],
+		references: [user.id]
+	})
+}));
 
 export const listing = sqliteTable('listing', {
 	id: text('id')

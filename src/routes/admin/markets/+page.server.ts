@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
-import { market } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { market, marketAdmin, user } from '$lib/server/db/schema';
+import { eq, and } from 'drizzle-orm';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
@@ -37,7 +37,31 @@ export const load = async ({ locals }) => {
 		.from(market)
 		.orderBy(market.createdAt);
 
-	return { user: locals.user, markets };
+	// Fetch all users for admin assignment
+	const allUsers = await db
+		.select({
+			id: user.id,
+			name: user.name,
+			email: user.email,
+			isAdmin: user.isAdmin
+		})
+		.from(user)
+		.orderBy(user.name);
+
+	// Fetch all market admins
+	const allMarketAdmins = await db
+		.select({
+			id: marketAdmin.id,
+			marketId: marketAdmin.marketId,
+			userId: marketAdmin.userId,
+			assignedAt: marketAdmin.assignedAt,
+			userName: user.name,
+			userEmail: user.email
+		})
+		.from(marketAdmin)
+		.innerJoin(user, eq(marketAdmin.userId, user.id));
+
+	return { user: locals.user, markets, users: allUsers, marketAdmins: allMarketAdmins };
 };
 
 export const actions = {
@@ -154,6 +178,96 @@ export const actions = {
 		} catch (error) {
 			console.error('Failed to create market:', error);
 			return { success: false, error: 'Failed to create market. It may already exist.' };
+		}
+	},
+
+	assignAdmin: async ({ request, locals }) => {
+		if (!locals.user || !locals.user.isAdmin) {
+			return { success: false, error: 'Unauthorized: Only admins can assign market admins' };
+		}
+
+		const formData = await request.formData();
+		const marketId = formData.get('marketId') as string;
+		const userId = formData.get('userId') as string;
+
+		if (!marketId || !userId) {
+			return { success: false, error: 'Market ID and User ID are required' };
+		}
+
+		try {
+			// Verify the user exists
+			const targetUser = await db
+				.select({ id: user.id })
+				.from(user)
+				.where(eq(user.id, userId))
+				.limit(1);
+
+			if (targetUser.length === 0) {
+				return { success: false, error: 'User not found' };
+			}
+
+			// Verify the market exists
+			const targetMarket = await db
+				.select({ id: market.id })
+				.from(market)
+				.where(eq(market.id, marketId))
+				.limit(1);
+
+			if (targetMarket.length === 0) {
+				return { success: false, error: 'Market not found' };
+			}
+
+			// Check if already an admin
+			const existingAdmin = await db
+				.select({ id: marketAdmin.id })
+				.from(marketAdmin)
+				.where(and(
+					eq(marketAdmin.marketId, marketId),
+					eq(marketAdmin.userId, userId)
+				))
+				.limit(1);
+
+			if (existingAdmin.length > 0) {
+				return { success: false, error: 'User is already a market admin for this market' };
+			}
+
+			await db.insert(marketAdmin).values({
+				marketId,
+				userId
+			});
+
+			return { success: true, message: 'Market admin assigned successfully' };
+		} catch (error) {
+			console.error('Failed to assign market admin:', error);
+			return { success: false, error: 'Failed to assign market admin' };
+		}
+	},
+
+	unassignAdmin: async ({ request, locals }) => {
+		if (!locals.user || !locals.user.isAdmin) {
+			return { success: false, error: 'Unauthorized: Only admins can unassign market admins' };
+		}
+
+		const formData = await request.formData();
+		const marketId = formData.get('marketId') as string;
+		const userId = formData.get('userId') as string;
+
+		if (!marketId || !userId) {
+			return { success: false, error: 'Market ID and User ID are required' };
+		}
+
+		try {
+			await db
+				.delete(marketAdmin)
+				.where(and(
+					eq(marketAdmin.marketId, marketId),
+					eq(marketAdmin.userId, userId)
+				));
+
+			return { success: true, message: 'Market admin unassigned successfully' };
+		} catch (error) {
+			console.error('Failed to unassign market admin:', error);
+			return { success: false, error: 'Failed to unassign market admin' };
 		}
 	}
 };

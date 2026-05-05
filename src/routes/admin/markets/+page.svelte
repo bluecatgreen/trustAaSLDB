@@ -12,6 +12,48 @@
 	let editableNeighbourhood = $state('');
 	let editableRoad = $state('');
 
+	// Market admin management state
+	let selectedMarketId = $state<string | null>(null);
+	let showAssignForm = $state(false);
+	let selectedUserId = $state<string>('');
+	let assignSuccess = $state(false);
+	let assignError = $state('');
+
+	// Get admins for a specific market
+	function getMarketAdmins(marketId: string) {
+		return data.marketAdmins?.filter(admin => admin.marketId === marketId) || [];
+	}
+
+	// Get users who are NOT already admins for this market
+	function getAvailableUsers(marketId: string) {
+		const adminUserIds = getMarketAdmins(marketId).map(a => a.userId);
+		return data.users?.filter(u => !adminUserIds.includes(u.id)) || [];
+	}
+
+	function toggleMarketAdmins(marketId: string) {
+		if (selectedMarketId === marketId) {
+			selectedMarketId = null;
+			showAssignForm = false;
+		} else {
+			selectedMarketId = marketId;
+			showAssignForm = false;
+		}
+		selectedUserId = '';
+		assignError = '';
+	}
+
+	function openAssignForm() {
+		showAssignForm = true;
+		selectedUserId = '';
+		assignError = '';
+	}
+
+	function closeAssignForm() {
+		showAssignForm = false;
+		selectedUserId = '';
+		assignError = '';
+	}
+
 	// Available fields for selection
 	const availableFields = [
 		{ key: 'country', label: 'Country' },
@@ -167,7 +209,7 @@
 			</div>
 		{/if}
 
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 			<!-- Create Market Form -->
 			<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
 				<h2 class="font-['Space_Grotesk'] text-xl font-semibold text-white mb-4">Create New Market</h2>
@@ -302,6 +344,8 @@
 				{:else}
 					<div class="space-y-3 max-h-[600px] overflow-y-auto">
 						{#each data.markets as market}
+							{@const admins = getMarketAdmins(market.id)}
+							{@const availableUsersForMarket = getAvailableUsers(market.id)}
 							<div class="bg-white/5 rounded-lg p-4 border border-white/5">
 								<div class="flex justify-between items-start mb-2">
 									<h3 class="text-white font-medium">{market.name || 'Unnamed Market'}</h3>
@@ -322,6 +366,97 @@
 										<span class="text-xs text-white">{JSON.parse(market.uniqueFields).join(', ')}</span>
 									</div>
 								{/if}
+
+								<!-- Market Admins Section -->
+								<div class="mt-3 pt-3 border-t border-white/5">
+									<button
+										type="button"
+										onclick={() => toggleMarketAdmins(market.id)}
+										class="flex items-center gap-2 text-sm text-purple-200 hover:text-white transition-colors"
+									>
+										<svg class="w-4 h-4 {selectedMarketId === market.id ? 'rotate-90' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+										</svg>
+										<span>Market Admins ({admins.length})</span>
+									</button>
+
+									{#if selectedMarketId === market.id}
+										<div class="mt-3 space-y-2">
+											{#if admins.length > 0}
+												{#each admins as admin}
+													<div class="flex items-center justify-between bg-white/5 rounded-lg p-2">
+														<div class="text-sm">
+															<span class="text-white">{admin.userName || 'Unknown'}</span>
+															<span class="text-purple-300 text-xs ml-2">{admin.userEmail}</span>
+														</div>
+														<form method="POST" action="?/unassignAdmin">
+															<input type="hidden" name="marketId" value={market.id} />
+															<input type="hidden" name="userId" value={admin.userId} />
+															<button
+																type="submit"
+																class="text-xs text-red-400 hover:text-red-300 px-2 py-1 rounded hover:bg-red-500/20 transition-colors"
+															>
+																Remove
+															</button>
+														</form>
+													</div>
+												{/each}
+											{:else}
+												<p class="text-xs text-purple-300">No admins assigned yet.</p>
+											{/if}
+
+											{#if showAssignForm}
+												<div class="mt-3 p-3 bg-white/5 rounded-lg">
+													{#if availableUsersForMarket.length > 0}
+														<form method="POST" action="?/assignAdmin" class="space-y-2">
+															<input type="hidden" name="marketId" value={market.id} />
+															<label for="user-{market.id}" class="text-xs text-purple-200">Select User</label>
+															<select
+																id="user-{market.id}"
+																name="userId"
+																bind:value={selectedUserId}
+																class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+															>
+																<option value="" class="text-gray-500">Choose a user...</option>
+																{#each availableUsersForMarket as user}
+																	<option value={user.id} class="text-gray-900">{user.name} ({user.email})</option>
+																{/each}
+															</select>
+															<div class="flex gap-2">
+																<button
+																	type="submit"
+																	disabled={!selectedUserId}
+																	class="flex-1 px-3 py-2 bg-pink-500 hover:bg-pink-600 disabled:bg-pink-500/50 disabled:cursor-not-allowed text-white text-sm rounded-lg transition-colors"
+																>
+																	Assign
+																</button>
+																<button
+																	type="button"
+																	onclick={closeAssignForm}
+																	class="px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg transition-colors"
+																>
+																	Cancel
+																</button>
+															</div>
+														</form>
+													{:else}
+														<p class="text-xs text-purple-300">All users are already assigned as admins for this market.</p>
+													{/if}
+												</div>
+											{:else}
+												{#if availableUsersForMarket.length > 0}
+													<button
+														type="button"
+														onclick={openAssignForm}
+														class="mt-2 px-3 py-1.5 bg-pink-500/20 hover:bg-pink-500/30 text-pink-300 text-xs rounded-lg transition-colors"
+													>
+														+ Assign Admin
+													</button>
+												{/if}
+											{/if}
+										</div>
+									{/if}
+								</div>
 							</div>
 						{/each}
 					</div>
