@@ -143,3 +143,60 @@ export async function sendTransactionNotificationEmail(data: TransactionEmailDat
 		`
 	});
 }
+
+export interface MarketAccessRequestEmailData {
+	recipientEmails: string[];
+	requesterName: string;
+	requesterEmail: string;
+	marketName: string;
+	adminDashboardUrl: string;
+}
+
+export async function sendMarketAccessRequestEmail(data: MarketAccessRequestEmailData) {
+	const { recipientEmails, requesterName, requesterEmail, marketName, adminDashboardUrl } = data;
+
+	const subject = `New access request for market: ${marketName}`;
+
+	if (!resend) {
+		console.log(`[DEV] Market access request email would be sent to: ${recipientEmails.join(', ')}`);
+		console.log(`[DEV] Requester: ${requesterName} (${requesterEmail})`);
+		console.log(`[DEV] Market: ${marketName}`);
+		console.log(`[DEV] Admin dashboard: ${adminDashboardUrl}`);
+		return;
+	}
+
+	await resend.emails.send({
+		from: env.EMAIL_FROM || 'noreply@yourdomain.com',
+		to: recipientEmails,
+		subject,
+		html: `
+			<!DOCTYPE html>
+			<html>
+			<head>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			</head>
+			<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+				<h1 style="color: #7c3aed;">New Market Access Request</h1>
+				<p>Hi,</p>
+				<p>A new user has requested access to <strong>${marketName}</strong>.</p>
+
+				<div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 20px 0;">
+					<p style="margin-top: 0;"><strong>Requester Name:</strong> ${requesterName}</p>
+					<p><strong>Email:</strong> ${requesterEmail}</p>
+					<p><strong>Market:</strong> ${marketName}</p>
+					<p><strong>Requested At:</strong> ${new Date().toLocaleString()}</p>
+				</div>
+
+				<p>Please review this request and approve or reject it in the admin dashboard.</p>
+
+				<div style="text-align: center; margin: 30px 0;">
+					<a href="${adminDashboardUrl}" style="background-color: #7c3aed; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Review Request</a>
+				</div>
+
+				<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+				<p style="color: #9ca3af; font-size: 12px;">This is an automated notification from TrustAA. Please do not reply to this email.</p>
+			</body>
+			</html>
+		`
+	});
+}

@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
-import { market, marketAdmin, user } from '$lib/server/db/schema';
-import { eq, and } from 'drizzle-orm';
+import { market, marketAdmin, marketAccessRequest, marketUser, user } from '$lib/server/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
@@ -61,7 +61,24 @@ export const load = async ({ locals }) => {
 		.from(marketAdmin)
 		.innerJoin(user, eq(marketAdmin.userId, user.id));
 
-	return { user: locals.user, markets, users: allUsers, marketAdmins: allMarketAdmins };
+	// Fetch pending access requests
+	const pendingRequests = await db
+		.select({
+			id: marketAccessRequest.id,
+			marketId: marketAccessRequest.marketId,
+			userId: marketAccessRequest.userId,
+			status: marketAccessRequest.status,
+			requestedAt: marketAccessRequest.requestedAt,
+			userName: user.name,
+			userEmail: user.email,
+			marketName: market.name
+		})
+		.from(marketAccessRequest)
+		.innerJoin(user, eq(marketAccessRequest.userId, user.id))
+		.innerJoin(market, eq(marketAccessRequest.marketId, market.id))
+		.where(eq(marketAccessRequest.status, 'pending'));
+
+	return { user: locals.user, markets, users: allUsers, marketAdmins: allMarketAdmins, pendingRequests };
 };
 
 export const actions = {
@@ -268,6 +285,92 @@ export const actions = {
 		} catch (error) {
 			console.error('Failed to unassign market admin:', error);
 			return { success: false, error: 'Failed to unassign market admin' };
+		}
+	},
+
+	approveRequest: async ({ request, locals }) => {
+		if (!locals.user || !locals.user.isAdmin) {
+			return { success: false, error: 'Unauthorized: Only admins can approve requests' };
+		}
+
+		const formData = await request.formData();
+		const requestId = formData.get('requestId') as string;
+
+		if (!requestId) {
+			return { success: false, error: 'Request ID is required' };
+		}
+
+		try {
+			// Get the request details
+			const accessRequest = await db
+				.select({
+					id: marketAccessRequest.id,
+					marketId: marketAccessRequest.marketId,
+					userId: marketAccessRequest.userId,
+					status: marketAccessRequest.status
+				})
+				.from(marketAccessRequest)
+				.where(eq(marketAccessRequest.id, requestId))
+				.limit(1);
+
+			if (accessRequest.length === 0) {
+				return { success: false, error: 'Request not found' };
+			}
+
+			if (accessRequest[0].status && accessRequest[0].status !== 'pending') {
+				return { success: false, error: 'Request is not pending' };
+			}
+
+			// Create market_user association
+			await db.insert(marketUser).values({
+				marketId: accessRequest[0].marketId,
+				userId: accessRequest[0].userId
+			});
+
+			// Update request status
+			await db
+				.update(marketAccessRequest)
+				.set({
+					status: 'approved',
+					reviewedAt: new Date(),
+					reviewedBy: locals.user.id
+				})
+				.where(eq(marketAccessRequest.id, requestId));
+
+			return { success: true, message: 'Request approved successfully' };
+		} catch (error) {
+			console.error('Failed to approve request:', error);
+			return { success: false, error: 'Failed to approve request' };
+		}
+	},
+
+	rejectRequest: async ({ request, locals }) => {
+		if (!locals.user || !locals.user.isAdmin) {
+			return { success: false, error: 'Unauthorized: Only admins can reject requests' };
+		}
+
+		const formData = await request.formData();
+		const requestId = formData.get('requestId') as string;
+
+		if (!requestId) {
+			return { success: false, error: 'Request ID is required' };
+		}
+
+		try {
+			// Update request status
+			await db
+				.update(marketAccessRequest)
+				.set({
+					status: 'rejected',
+					reviewedAt: new Date(),
+					reviewedBy: locals.user.id
+				})
+				.where(eq(marketAccessRequest.id, requestId));
+
+			return { success: true, message: 'Request rejected' };
+		} catch (error) {
+			console.error('Failed to reject request:', error);
+			return { success: false, error: 'Failed to reject request' };
 		}
 	}
 };

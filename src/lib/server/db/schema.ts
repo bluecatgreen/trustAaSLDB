@@ -89,7 +89,9 @@ export const marketAdmin = sqliteTable(
 
 // Relations
 export const marketRelations = relations(market, ({ many }) => ({
-	admins: many(marketAdmin)
+	admins: many(marketAdmin),
+	users: many(marketUser),
+	accessRequests: many(marketAccessRequest)
 }));
 
 export const marketAdminRelations = relations(marketAdmin, ({ one }) => ({
@@ -99,6 +101,79 @@ export const marketAdminRelations = relations(marketAdmin, ({ one }) => ({
 	}),
 	user: one(user, {
 		fields: [marketAdmin.userId],
+		references: [user.id]
+	})
+}));
+
+export const marketAccessRequest = sqliteTable(
+	'market_access_request',
+	{
+		id: text('id')
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		marketId: text('market_id')
+			.notNull()
+			.references(() => market.id, { onDelete: 'cascade' }),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		status: text('status').default('pending'), // 'pending', 'approved', 'rejected'
+		requestedAt: integer('requested_at', { mode: 'timestamp' })
+			.$defaultFn(() => new Date()),
+		reviewedAt: integer('reviewed_at', { mode: 'timestamp' }),
+		reviewedBy: text('reviewed_by').references(() => user.id)
+	},
+	(table) => [
+		index('market_access_request_market_idx').on(table.marketId),
+		index('market_access_request_user_idx').on(table.userId),
+		index('market_access_request_status_idx').on(table.status)
+	]
+);
+
+export const marketUser = sqliteTable(
+	'market_user',
+	{
+		id: text('id')
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		marketId: text('market_id')
+			.notNull()
+			.references(() => market.id, { onDelete: 'cascade' }),
+		userId: text('user_id')
+			.notNull()
+			.references(() => user.id, { onDelete: 'cascade' }),
+		associatedAt: integer('associated_at', { mode: 'timestamp' })
+			.$defaultFn(() => new Date())
+	},
+	(table) => [
+		index('market_user_market_idx').on(table.marketId),
+		index('market_user_user_idx').on(table.userId)
+	]
+);
+
+// Relations
+export const marketAccessRequestRelations = relations(marketAccessRequest, ({ one }) => ({
+	market: one(market, {
+		fields: [marketAccessRequest.marketId],
+		references: [market.id]
+	}),
+	user: one(user, {
+		fields: [marketAccessRequest.userId],
+		references: [user.id]
+	}),
+	reviewer: one(user, {
+		fields: [marketAccessRequest.reviewedBy],
+		references: [user.id]
+	})
+}));
+
+export const marketUserRelations = relations(marketUser, ({ one }) => ({
+	market: one(market, {
+		fields: [marketUser.marketId],
+		references: [market.id]
+	}),
+	user: one(user, {
+		fields: [marketUser.userId],
 		references: [user.id]
 	})
 }));

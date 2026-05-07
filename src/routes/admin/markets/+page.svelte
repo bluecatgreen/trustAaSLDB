@@ -463,5 +463,52 @@
 				{/if}
 			</div>
 		</div>
+
+		<!-- Pending Access Requests -->
+		{#if data.pendingRequests && data.pendingRequests.length > 0}
+			<div class="mt-8">
+				<h2 class="font-['Space_Grotesk'] text-2xl font-semibold text-white mb-4">Pending Access Requests</h2>
+				<div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6">
+					<div class="space-y-3">
+						{#each data.pendingRequests as request}
+							<div class="bg-white/5 rounded-lg p-4 border border-white/5">
+								<div class="flex justify-between items-start">
+									<div>
+										<h3 class="text-white font-medium">{request.userName || 'Unknown User'}</h3>
+										<p class="text-purple-300 text-sm">{request.userEmail}</p>
+										<p class="text-purple-200 text-sm mt-1">
+											Requested access to: <span class="text-white font-medium">{request.marketName || 'Unknown Market'}</span>
+										</p>
+										<p class="text-purple-300 text-xs mt-1">
+											Requested: {request.requestedAt ? new Date(request.requestedAt).toLocaleString() : 'Unknown'}
+										</p>
+									</div>
+									<div class="flex gap-2">
+										<form method="POST" action="?/approveRequest">
+											<input type="hidden" name="requestId" value={request.id} />
+											<button
+												type="submit"
+												class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-sm rounded-lg transition-colors"
+											>
+												Approve
+											</button>
+										</form>
+										<form method="POST" action="?/rejectRequest">
+											<input type="hidden" name="requestId" value={request.id} />
+											<button
+												type="submit"
+												class="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg transition-colors"
+											>
+												Reject
+											</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/if}
 	</main>
 </div>
