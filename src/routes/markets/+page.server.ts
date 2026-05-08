@@ -171,7 +171,7 @@ export const actions = {
 				requesterName: locals.user.name,
 				requesterEmail: locals.user.email,
 				marketName: marketData[0].name || 'Unnamed Market',
-				adminDashboardUrl: `${env.ORIGIN || 'http://localhost:5173'}/admin/markets`
+				adminDashboardUrl: `${env.ORIGIN || 'http://localhost:5173'}/markets/admin`
 			});
 
 			return { success: true, message: 'Access request submitted successfully' };
